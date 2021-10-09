@@ -4,7 +4,7 @@ const routes = require('./route/imobbilesRoute')
 const app = express();
 
 app.use(express.json());
-app.use(routes);
+app.use('/api', routes);
 
 app.use((error, req, res, next ) => {
     res.status(error.status || 500)
@@ -13,4 +13,4 @@ app.use((error, req, res, next ) => {
 
 // app.use('/', require('./route/imobbilesRoute'));
 
-app.listen(3000);
+app.listen(3333);

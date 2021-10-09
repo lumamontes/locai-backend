@@ -1,5 +1,5 @@
 -- yarn add express mysql dotenv cors body-parser
--- create database dbprojetiv2;
+create database dbprojetiv2;
 -- use dbprojetiv2;
 
 
@@ -56,11 +56,10 @@ CREATE TABLE `amenities` (
 
 CREATE TABLE `users` (
   `id` int primary key auto_increment not null,
+  `user_type_id` int,
   `name` varchar(80),
   `email` varchar(80),
   `telephone` varchar(80),
-  `realtor_user` boolean,
-  `advertiser_user` boolean,
   `birth_date` date,
   `national_register` float(14),
   `city` varchar(80),
@@ -69,7 +68,20 @@ CREATE TABLE `users` (
   `password` varchar(150),
   `updated_at` timestamp,
   `created_at` timestamp
+   FOREIGN KEY (user_type_id) REFERENCES user_types(id)
+
 );
+
+CREATE TABLE `user_types` (
+  `id` int primary key auto_increment not null,
+  `name`  varchar(80),
+  `updated_at` timestamp,
+  `created_at` timestamp
+);
+
+user_Type = 1 - user 
+user_Type = 2 - anuncios 
+user_Type = 3 - corretor 
 
 
 create table usuarios(id int primary key auto_increment, nome varchar(80),
@@ -79,3 +91,7 @@ estado varchar(50),
  updtated_at timestamp); 
 
 
+
+
+$ knex migrate:up 001_migration_name.js
+/home/luma/www/projeti-home-backend/database/migrations/
