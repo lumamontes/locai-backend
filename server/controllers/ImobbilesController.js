@@ -8,6 +8,17 @@ module.exports = {
             return response.json(error);
         }
     },
+    async single_read(request, response) {
+        try {
+            const { id } = request.params;
+            let imobbiles = await knex.from('imobbiles')
+            .where({id})
+            
+            return response.json(imobbiles);
+        } catch (error) {
+            return response.json(error);
+        }
+    },
     async create(request, response, next) {
         try {
             const {
