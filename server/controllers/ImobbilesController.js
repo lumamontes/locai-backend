@@ -79,6 +79,17 @@ module.exports = {
         } catch (error) {
             next(error)
         }
+    },
+    async delete(request, response, next) {
+        try {
+            const { id } = request.params;
+            await knex('imobbiles')
+                .where({id})
+                .del()
+                return response.send();
+        } catch (error) {
+            next(error)
+        }
     }
 }
 
