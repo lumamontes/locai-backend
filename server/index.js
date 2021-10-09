@@ -1,9 +1,11 @@
 const express = require('express');
-const routes = require('./route/imobbilesRoute')
+// const imobbilesRoutes = require('./route/imobbilesRoute')
+const route = require('./route/UsersRoute')
 const cors = require('cors');
 
 const app = express();
 
+app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use((req, res, next) => {
     //console.log("Acessou o Middleware!");
@@ -12,7 +14,9 @@ app.use((req, res, next) => {
     app.use(cors());
     next();
 });
-app.use('/api', routes);
+
+// app.use('/api', imobbilesRoutes);
+app.use('/api', route);
 
 
 
