@@ -1,10 +1,20 @@
 const express = require('express');
 const routes = require('./route/imobbilesRoute')
+const cors = require('cors');
 
 const app = express();
 
 app.use(express.json());
+app.use((req, res, next) => {
+    //console.log("Acessou o Middleware!");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
+    app.use(cors());
+    next();
+});
 app.use('/api', routes);
+
+
 
 //not Found                          
 app.use((req, res, next ) => {
@@ -19,6 +29,5 @@ app.use((error, req, res, next ) => {
     res.json({error: error.message})
 })
 
-// app.use('/', require('./route/imobbilesRoute'));
 
 app.listen(3333);
