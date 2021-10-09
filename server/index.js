@@ -1,6 +1,8 @@
 const express = require('express');
-// const imobbilesRoutes = require('./route/imobbilesRoute')
-const route = require('./route/UsersRoute')
+const imobbilesRoutes = require('./route/imobbilesRoute')
+const imobbilesTypesRoute = require('./route/imobbilesTypesRoute')
+const usersControllerRoute = require('./route/UsersRoute')
+
 const cors = require('cors');
 
 const app = express();
@@ -15,10 +17,13 @@ app.use((req, res, next) => {
     next();
 });
 
-// app.use('/api', imobbilesRoutes);
-app.use('/api', route);
+app.get('/', (req, res) => {
+	return res.json({ status: true }).send();
+})
 
-
+app.use('/api', imobbilesRoutes);
+app.use('/api', imobbilesTypesRoute);
+app.use('/api', usersControllerRoute);
 
 //not Found                          
 app.use((req, res, next ) => {
