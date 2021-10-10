@@ -19,6 +19,16 @@ module.exports = {
             return response.json(error);
         }
     },
+    async single_user(request, response) {
+        try {
+            const { user_id } = request.params;
+            let imobbiles = await knex.from('imobbiles')
+            .where({user_id})
+            return response.json(imobbiles);
+        } catch (error) {
+            return response.json(error);
+        }
+    },
     async create(request, response, next) {
         try {
             const {

@@ -4,6 +4,7 @@ const ImobbilesController = require('../controllers/ImobbilesController');
 
 router.get('/imobbiles', ImobbilesController.index);
 router.get('/imobbiles/:id', ImobbilesController.single_read) 
+router.get('/imobbiles_user/:user_id', ImobbilesController.single_user) 
 router.post('/imobbiles', ImobbilesController.create);
 router.put('/imobbiles/:id', ImobbilesController.update);
 router.delete('/imobbiles/:id', ImobbilesController.delete);
