@@ -5,8 +5,8 @@ exports.up = function (knex) {
             table.increments('id');
             table.integer('user_type_id').unsigned().references('users_types.id')
             table.string('name', 200).notNullable();
-            table.string('email', 200).notNullable();
-            table.string('telefone', 200).notNullable();
+            table.string('email', 200).notNullable().unique();
+            table.string('telephone', 200).notNullable();
             table.date('birth_date');
             table.float('national_register');
             table.string('city', 200);
