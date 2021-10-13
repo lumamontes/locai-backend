@@ -3,7 +3,7 @@ exports.up = function (knex) {
     return knex.schema
         .createTable('users', function (table) {
             table.increments('id');
-            table.integer('user_type_id').unsigned().references('users_types.id')
+            table.integer('user_type_id').unsigned().references('user_types.id')
             table.string('name', 200).notNullable();
             table.string('email', 200).notNullable().unique();
             table.string('telephone', 200).notNullable();
