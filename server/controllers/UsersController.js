@@ -3,11 +3,11 @@ const jwt = require('jsonwebtoken');
 const decode = require('jwt-decode');
 const bcrypt = require('bcryptjs');
 const passport = require("passport");
-const uuid =  require('uuid').v4;
+const uuid = require('uuid').v4;
 const tokens = ['', ''];
 
 module.exports = {
-    
+
     async index(request, response) {
         try {
             const { id } = request.params;
@@ -60,53 +60,53 @@ module.exports = {
 
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
-            subject: email,
-            expiresIn: 5, // 15 minutes
+                subject: email,
+                expiresIn: 5, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
-        
+
             return {
-            token,
-            refreshToken,
+                token,
+                refreshToken,
             }
         }
 
-        function createRefreshToken(email, token){
+        function createRefreshToken(email, token) {
             const currentUserTokens = [];
             const refreshToken = uuid();
             tokens.push(email, [...currentUserTokens, refreshToken])
             return refreshToken;
-          }
-        function checkRefreshTokenIsValid(email,refreshToken){
-            const storedRefreshTokens = tokens.get(email)??[]
-          
-            return storedRefreshTokens.some(token => token == refreshToken)
-          }
-          
-          function invalidateRefreshToken(email, refreshToken) {
+        }
+        function checkRefreshTokenIsValid(email, refreshToken) {
             const storedRefreshTokens = tokens.get(email) ?? []
-          
+
+            return storedRefreshTokens.some(token => token == refreshToken)
+        }
+
+        function invalidateRefreshToken(email, refreshToken) {
+            const storedRefreshTokens = tokens.get(email) ?? []
+
             tokens.set(email, storedRefreshTokens.filter(token => token !== refreshToken));
-          }
+        }
 
         const {
             email,
             password
         } = request.body;
         let users = await knex.from('users')
-        .where({ email })
+            .where({ email })
         if (!users) {
             return response.
-            status(401)
-            .json({
-                error: true,
-                message: 'Não foi possível encontrar o usuário'
-            });
+                status(401)
+                .json({
+                    error: true,
+                    message: 'Não foi possível encontrar o usuário'
+                });
         }
-        for(user of users){
-            try{
-                if(await bcrypt.compare(password, user.password)){
-                    
+        for (user of users) {
+            try {
+                if (await bcrypt.compare(password, user.password)) {
+
                     const { token, refreshToken } = generateJwtAndRefreshToken(email, {
                         permissions: user.permissions,
                     })
@@ -115,7 +115,7 @@ module.exports = {
                         refreshToken,
                         user_type_id: user.user_type_id,
                     })
-                }else{
+                } else {
                     return response.
                         status(401)
                         .json({
@@ -123,7 +123,7 @@ module.exports = {
                             message: 'Senha incorreta'
                         });
                 }
-            }catch(err){
+            } catch (err) {
                 console.log('fora');
                 next(err);
             }
