@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Headers", ["Content-Type", "Authorization"]);
     res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
     app.use(cors({
         origin: "https://localhost:3000",
@@ -100,7 +100,7 @@ app.use('/api', imobbilesTypesRoute);
 app.use('/api', UsersRoute);
 app.get('/me', checkAuthMiddleware, async (request, response) => {
     const email = request.user;
-  
+    console.log(email);
     let user = await knex.from('users')
     .where({ email })  
     if (!user) {
@@ -115,19 +115,13 @@ app.get('/me', checkAuthMiddleware, async (request, response) => {
       roles: user.roles,
     })
   });
-//not Found                          
-app.use((req, res, next ) => {
-    const error = new Error('Not found');
-    error.status = 404
-    next(error);
-})
-
-app.post('/refresh', addUserInformationToRequest, (request, response) => {
+  
+  app.post('/refresh', addUserInformationToRequest, (request, response) => {
     const email = request.user;
     const { refreshToken } = request.body;
-  
+    
     const user = users.get(email);
-  
+    
     if (!user) {
       return response
         .status(401)
@@ -135,24 +129,24 @@ app.post('/refresh', addUserInformationToRequest, (request, response) => {
           error: true, 
           message: 'User not found.'
         });
-    }
-  
-    if (!refreshToken) {
-      return response
+      }
+      
+      if (!refreshToken) {
+        return response
         .status(401)
         .json({ error: true, message: 'Refresh token is required.' });
     }
-  
+    
     const isValidRefreshToken = checkRefreshTokenIsValid(email, refreshToken)
-  
+    
     if (!isValidRefreshToken) {
       return response
-        .status(401)
-        .json({ error: true, message: 'Refresh token is invalid.' });
+      .status(401)
+      .json({ error: true, message: 'Refresh token is invalid.' });
     }
-  
+    
     invalidateRefreshToken(email, refreshToken)
-  
+    
     const { token, refreshToken: newRefreshToken } = generateJwtAndRefreshToken(email, {
       permissions: user.permissions,
       roles: user.roles,
@@ -166,8 +160,15 @@ app.post('/refresh', addUserInformationToRequest, (request, response) => {
     });
   });
   
-
-// catch all
+  //not Found                          
+  app.use((req, res, next ) => {
+      const error = new Error('Not found');
+      error.status = 404
+      next(error);
+  })
+  
+  
+  // catch all
 app.use((error, req, res, next ) => {
     res.status(error.status || 500)
     res.json({error: error.message})
