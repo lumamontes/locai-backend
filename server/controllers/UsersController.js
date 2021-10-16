@@ -61,7 +61,7 @@ module.exports = {
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
                 subject: email,
-                expiresIn: 5, // 15 minutes
+                expiresIn: 10, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
 
@@ -128,19 +128,6 @@ module.exports = {
                 next(err);
             }
         }
-
-        // const { token, refreshToken } = generateJwTandRefreshToken(email, {
-        //     permissions: user.permissions,
-        // })
-        // // console.log(request.body);
-        // // console.log(token, refreshToken)
-
-        // return response.json({
-        //     token,
-        //     refreshToken,
-        //     permissions: user.user_type_id,
-        // })
-
     },
     async addUserInformationToRequest(request, response, next) {
         const email = request.user;
@@ -167,25 +154,27 @@ module.exports = {
         })
 
     },
-    async me(request, response, next) {
-        const email = request.user;
-        let user = await knex.from('users')
-            .where({ email })
-        if (!user) {
-            return response.
-                status(401)
-                .json({
-                    error: true,
-                    message: 'Usuário não encontrado'
-                });
-        }
-        return response.json({
-            token,
-            refreshToken,
-            permissions: user.user_type_id,
-        })
+    // async checkAuthMiddlewareme(request, response, next) {
+    //     const email = request.user;
+    //         let user = knex.from('users')
+    //         .where({ email })
+    //          console.log(user);
 
-    },
+    //         if (!user) {
+    //             return response.
+    //                 status(401)
+    //                 .json({
+    //                     error: true,
+    //                     message: 'Usuário não encontrado'
+    //                 });
+    //         }
+    //         return response.json({
+    //             token,
+    //             refreshToken,
+    //             permissions: user.user_type_id,
+    //         })
+
+    // },
 }
 
 
