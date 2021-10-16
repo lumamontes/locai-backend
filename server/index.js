@@ -4,6 +4,8 @@ const passport = require("passport");
 const imobbilesRoutes = require('./route/imobbilesRoute')
 const imobbilesTypesRoute = require('./route/imobbilesTypesRoute')
 const UsersRoute = require('./route/UsersRoute')
+const jwt = require('jsonwebtoken');
+const knex = require('../database/knex');
 
 const session = require("express-session");
 const cookieParser = require('cookie-parser');
@@ -13,41 +15,42 @@ const app = express();
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
+
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", ["Content-Type", "Authorization"]);
-    res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
+    res.header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
+    res.header ("Access-Control-Expose-Headers", "Content-Length, X-JSON");
     app.use(cors({
         origin: "https://localhost:3000",
         credentials: true
     }));
-    next();
-});
+    return next();
+  });
 
 function checkAuthMiddleware(request, response, next) {
     const { authorization } = request.headers;
+    console.log(authorization);
     if (!authorization) {
       return response
-        .status(401)
-        .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
+      .status(401)
+      .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
     }
-  
+    
     const [, token] = authorization?.split(' ');
-  
+    
     if (!token) {
       return response 
         .status(401)
         .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
     }
-  
     try {
-      const decoded = jwt.verify(token, auth.secret);
+      const decoded = jwt.verify(token, 'supersecret');
   
       request.user = decoded.sub;
-  
       return next();
     } catch (err) {
-  
+      console.log(err)
       return response 
         .status(401)
         .json({  error: true, code: 'token.expired', message: 'Token invalid.' })
@@ -91,36 +94,37 @@ app.use(session({
 }))
 
 app.use(cookieParser("secredcode"))
-app.use(passport.initialize());
-app.use(passport.session());
-// require('./passportConfig')(passport);
+// app.use(passport.initialize());
 
+// app.use(passport.session());
+// require('./passportConfig')(passport);
+app.options('*', cors()) 
 app.use('/api', imobbilesRoutes);
 app.use('/api', imobbilesTypesRoute);
 app.use('/api', UsersRoute);
-app.get('/me', checkAuthMiddleware, async (request, response) => {
+app.get('/api/me', checkAuthMiddleware, async (request, response) => {
     const email = request.user;
-    console.log(email);
-    let user = await knex.from('users')
+    let users = await knex.from('users')
     .where({ email })  
+    for (user of users) {
     if (!user) {
       return response
-        .status(400)
-        .json({ error: true, message: 'User not found.' });
+      .status(400)
+      .json({ error: true, message: 'User not found.' });
     }
-  
-    return response.json({
-      email,
-      permissions: user.permissions,
-      roles: user.roles,
-    })
+    
+      return response.status(200).json({
+        email,
+        user_type_id: user.user_type_id,
+      })
+    }
   });
   
-  app.post('/refresh', addUserInformationToRequest, (request, response) => {
+  app.post('/refresh', addUserInformationToRequest, async (request, response) => {
     const email = request.user;
     const { refreshToken } = request.body;
-    
-    const user = users.get(email);
+    let user = await knex.from('users')
+    .where({ email })  
     
     if (!user) {
       return response
