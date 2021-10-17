@@ -4,7 +4,7 @@ const decode = require('jwt-decode');
 const bcrypt = require('bcryptjs');
 const passport = require("passport");
 const uuid = require('uuid').v4;
-const tokens = ['', ''];
+const tokens = []
 
 module.exports = {
 
@@ -61,7 +61,7 @@ module.exports = {
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
                 subject: email,
-                expiresIn: 10, // 15 minutes
+                expiresIn: 5, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
 
@@ -95,65 +95,66 @@ module.exports = {
         } = request.body;
         let users = await knex.from('users')
             .where({ email })
-        if (!users) {
+        if (users.length == 0) {
             return response.
                 status(401)
                 .json({
                     error: true,
                     message: 'Não foi possível encontrar o usuário'
                 });
-        }
-        for (user of users) {
-            try {
-                if (await bcrypt.compare(password, user.password)) {
+        } else {
+            for (user of users) {
+                try {
+                    if (await bcrypt.compare(password, user.password)) {
 
-                    const { token, refreshToken } = generateJwtAndRefreshToken(email, {
-                        permissions: user.permissions,
-                    })
-                    return response.json({
-                        token,
-                        refreshToken,
-                        user_type_id: user.user_type_id,
-                    })
-                } else {
-                    return response.
-                        status(401)
-                        .json({
-                            error: true,
-                            message: 'Senha incorreta'
-                        });
+                        const { token, refreshToken } = generateJwtAndRefreshToken(email, {
+                            permissions: user.permissions,
+                        })
+                        return response.json({
+                            token,
+                            refreshToken,
+                            user_type_id: user.user_type_id,
+                        })
+                    } else {
+                        return response.
+                            status(401)
+                            .json({
+                                error: true,
+                                message: 'Senha incorreta'
+                            });
+                    }
+                } catch (err) {
+                    console.log(err);
+                    next(err);
                 }
-            } catch (err) {
-                console.log('fora');
-                next(err);
             }
         }
     },
-    async addUserInformationToRequest(request, response, next) {
-        const email = request.user;
-        // const { refreshToken } = request.body;
-        let user = await knex.from('users')
-            .where({ email })
-        if (!user) {
-            return response.
-                status(401)
-                .json({
-                    error: true,
-                    message: 'Usuário não encontrado'
-                });
-        }
+    // async addUserInformationToRequest(request, response, next) {
+    //     const email = request.user;
+    //     // const { refreshToken } = request.body;
+    //     let user = await knex.from('users')
+    //         .where({ email })
+    //     if (!user) {
+    //         return response.
+    //             status(401)
+    //             .json({
+    //                 error: true,
+    //                 message: 'Usuário não encontrado'
+    //             });
+    //     }
 
-        const { token, refreshToken } = generateJwTandRefreshToken(email, {
-            permissions: user.permissions,
-        })
+    //     const { token, refreshToken } = generateJwTandRefreshToken(email, {
+    //         permissions: user.permissions,
+    //     })
 
-        return response.status(200).json({
-            token,
-            refreshToken,
-            permissions: user.user_type_id,
-        })
+    //     return response.status(200).json({
+    //         token,
+    //         refreshToken,
+    //         permissions: user.user_type_id,
+    //     })
 
-    },
+    // },
     // async checkAuthMiddlewareme(request, response, next) {
     //     const email = request.user;
     //         let user = knex.from('users')
