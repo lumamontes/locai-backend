@@ -130,52 +130,6 @@ module.exports = {
             }
         }
     },
-    // async addUserInformationToRequest(request, response, next) {
-    //     const email = request.user;
-    //     // const { refreshToken } = request.body;
-    //     let user = await knex.from('users')
-    //         .where({ email })
-    //     if (!user) {
-    //         return response.
-    //             status(401)
-    //             .json({
-    //                 error: true,
-    //                 message: 'Usuário não encontrado'
-    //             });
-    //     }
-
-    //     const { token, refreshToken } = generateJwTandRefreshToken(email, {
-    //         permissions: user.permissions,
-    //     })
-
-    //     return response.status(200).json({
-    //         token,
-    //         refreshToken,
-    //         permissions: user.user_type_id,
-    //     })
-
-    // },
-    // async checkAuthMiddlewareme(request, response, next) {
-    //     const email = request.user;
-    //         let user = knex.from('users')
-    //         .where({ email })
-    //          console.log(user);
-
-    //         if (!user) {
-    //             return response.
-    //                 status(401)
-    //                 .json({
-    //                     error: true,
-    //                     message: 'Usuário não encontrado'
-    //                 });
-    //         }
-    //         return response.json({
-    //             token,
-    //             refreshToken,
-    //             permissions: user.user_type_id,
-    //         })
-
-    // },
 }
 
 
