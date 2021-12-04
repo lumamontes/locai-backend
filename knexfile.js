@@ -1,15 +1,15 @@
 // Update with your config settings.
-
+require('dotenv').config()
 module.exports = {
 
   development: {
     client: 'mysql',
     connection: {
-      host : 'localhost',
-      port : 3306,
-      user : 'root',
-      password : '123456789',
-      database : 'dbprojetiv3',
+      host : process.env.HOSTDB,
+      port : process.env.PORTDB,
+      user : process.env.USER,
+      password : process.env.PASSWORD,
+      database : process.env.DATABASE,
       charset: 'utf8'
     },
     migrations: {

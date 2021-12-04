@@ -78,13 +78,13 @@ module.exports = {
             return refreshToken;
         }
         function checkRefreshTokenIsValid(email, refreshToken) {
-            const storedRefreshTokens = tokens.get(email) ?? []
+            const storedRefreshTokens = tokens.get(email)
 
             return storedRefreshTokens.some(token => token == refreshToken)
         }
 
         function invalidateRefreshToken(email, refreshToken) {
-            const storedRefreshTokens = tokens.get(email) ?? []
+            const storedRefreshTokens = tokens.get(email)
 
             tokens.set(email, storedRefreshTokens.filter(token => token !== refreshToken));
         }

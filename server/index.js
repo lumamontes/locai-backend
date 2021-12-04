@@ -23,10 +23,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Methods", "HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");
   res.header("Access-Control-Allow-Headers", "X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
   res.header("Access-Control-Expose-Headers", "Content-Length, X-JSON");
-  app.use(cors({
-    origin: "https://localhost:3000",
-    credentials: true
-  }));
+  app.use(cors());
   return next();
 });
 
@@ -47,6 +44,11 @@ app.use('/api', imobbilesRoutes);
 app.use('/api', imobbilesTypesRoute);
 app.use('/api', UsersRoute);
 
+app.get('/status', (req,res)=>{
+  res.status(200).json({
+    message:"Serviço rodando"
+  })
+})
 
 //not Found                          
 app.use((req, res, next) => {
@@ -63,4 +65,6 @@ app.use((error, req, res, next) => {
 })
 
 
-app.listen(3333);
+app.listen(8080, ()=>{
+  console.log('Serviço rodando ')
+});

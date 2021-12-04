@@ -14,7 +14,7 @@ function checkAuthMiddleware(request, response, next) {
             .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
     }
 
-    const [, token] = authorization?.split(' ');
+    const [token] = authorization.split(' ');
 
     if (!token) {
         return response
@@ -42,7 +42,7 @@ function addUserInformationToRequest(request, response, next) {
             .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
     }
 
-    const [, token] = authorization?.split(' ');
+    const [token] = authorization.split(' ');
 
     if (!token) {
         return response
