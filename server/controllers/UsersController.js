@@ -114,6 +114,8 @@ module.exports = {
                             token,
                             refreshToken,
                             user_type_id: user.user_type_id,
+                            name:user.name,
+                            telephone:user.telephone
                         })
                     } else {
                         return response.
