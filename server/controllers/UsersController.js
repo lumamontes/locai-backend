@@ -61,7 +61,7 @@ module.exports = {
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
                 subject: email,
-                expiresIn: 5, // 15 minutes
+                expiresIn: 60*3*15*60, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
 
