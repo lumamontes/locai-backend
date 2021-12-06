@@ -43,6 +43,7 @@ module.exports = {
                 imobbile_country,
                 imobbile_city,
                 imobbile_state,
+                imobbile_neighborhood,
                 with_furniture,
                 accepts_pets,
             } = request.body;
@@ -56,6 +57,7 @@ module.exports = {
                 bathroom_quantity,
                 imobbile_adress,
                 imobbile_country,
+                imobbile_neighborhood,
                 imobbile_city,
                 imobbile_state,
                 with_furniture,
@@ -79,6 +81,7 @@ module.exports = {
                 imobbile_adress,
                 imobbile_country,
                 imobbile_state,
+                imobbile_neighborhood,
                 with_furniture,
                 accepts_pets,
             } = request.body;
@@ -95,6 +98,7 @@ module.exports = {
                     imobbile_adress,
                     imobbile_country,
                     imobbile_state,
+                    imobbile_neighborhood,
                     with_furniture,
                     accepts_pets})
                 .where({id});
