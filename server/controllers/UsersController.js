@@ -132,6 +132,16 @@ module.exports = {
             }
         }
     },
+
+    async userTypes(req,res){
+       try {
+        const userTypes = await knex.from('user_types')
+         res.status(201).json(userTypes)
+       } catch (error) {
+           console.log(error)
+       }
+    }
+    
 }
 
 

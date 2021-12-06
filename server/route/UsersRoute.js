@@ -83,6 +83,6 @@ router.get('/me', checkAuthMiddleware, async (request, response) => {
         })
     }
 });
-
+router.get('/usertypes', UsersController.userTypes)
 
 module.exports = router;
