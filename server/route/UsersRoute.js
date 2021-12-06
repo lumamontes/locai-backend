@@ -13,9 +13,10 @@ function checkAuthMiddleware(request, response, next) {
             .status(401)
             .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
     }
-
-    const [token] = authorization.split(' ');
-
+    
+    // const [token]   = authorization.split(' ');
+    const token = request.headers.authorization.split(' ')[1];
+    
     if (!token) {
         return response
             .status(401)
@@ -23,13 +24,12 @@ function checkAuthMiddleware(request, response, next) {
     }
     try {
         const decoded = jwt.verify(token, 'supersecret');
-
         request.user = decoded.sub;
         return next();
     } catch (err) {
         return response
             .status(401)
-            .json({ error: true, code: 'token.expired', message: 'Token invalid.' })
+            .json({ error: true, code: 'token.expired', message: 'Sessão expirada. Realize login novamente! :)' })
     }
 }
 
@@ -59,7 +59,7 @@ function addUserInformationToRequest(request, response, next) {
     } catch (err) {
         return response
             .status(401)
-            .json({ error: true, code: 'token.invalid', message: 'Invalid token formatttt.' })
+            .json({ error: true, code: 'token.invalid', message: 'Invalid token format.' })
     }
 }
 
@@ -79,6 +79,9 @@ router.get('/me', checkAuthMiddleware, async (request, response) => {
 
         return response.status(200).json({
             email,
+            name: user.name,
+            telephone: user.telephone,
+            profile_picture: user.profile_picture,
             user_type_id: user.user_type_id,
         })
     }

@@ -1,8 +1,6 @@
 const knex = require('../../database/knex');
 const jwt = require('jsonwebtoken');
-const decode = require('jwt-decode');
 const bcrypt = require('bcryptjs');
-const passport = require("passport");
 const uuid = require('uuid').v4;
 const tokens = []
 
@@ -35,7 +33,6 @@ module.exports = {
             } = request.body;
 
             let hashedPassword = await bcrypt.hash(password, 8);
-            // let password = hashedPassword;
 
             await knex('users').insert({
                 user_type_id,
@@ -49,7 +46,6 @@ module.exports = {
                 profile_picture,
                 password: hashedPassword
             });
-            // let password = hashedPassword;
 
             return response.status(201).send();
         } catch (error) {
@@ -61,32 +57,19 @@ module.exports = {
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
                 subject: email,
-                expiresIn: 60*3*15*60, // 15 minutes
+                expiresIn: 60 * 60 * 24 * 30, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
-
             return {
                 token,
                 refreshToken,
             }
         }
-
         function createRefreshToken(email, token) {
             const currentUserTokens = [];
             const refreshToken = uuid();
             tokens.push(email, [...currentUserTokens, refreshToken])
             return refreshToken;
-        }
-        function checkRefreshTokenIsValid(email, refreshToken) {
-            const storedRefreshTokens = tokens.get(email)
-
-            return storedRefreshTokens.some(token => token == refreshToken)
-        }
-
-        function invalidateRefreshToken(email, refreshToken) {
-            const storedRefreshTokens = tokens.get(email)
-
-            tokens.set(email, storedRefreshTokens.filter(token => token !== refreshToken));
         }
 
         const {
@@ -114,8 +97,8 @@ module.exports = {
                             token,
                             refreshToken,
                             user_type_id: user.user_type_id,
-                            name:user.name,
-                            telephone:user.telephone
+                            name: user.name,
+                            telephone: user.telephone
                         })
                     } else {
                         return response.
