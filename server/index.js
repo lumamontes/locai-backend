@@ -4,6 +4,7 @@ const passport = require("passport");
 const imobbilesRoutes = require('./route/imobbilesRoute')
 const imobbilesTypesRoute = require('./route/imobbilesTypesRoute')
 const UsersRoute = require('./route/UsersRoute')
+const filesRoute = require('./route/filesRoute')
 const jwt = require('jsonwebtoken');
 const knex = require('../database/knex');
 const decode = require('jwt-decode');
@@ -43,6 +44,7 @@ app.options('*', cors())
 app.use('/api', imobbilesRoutes);
 app.use('/api', imobbilesTypesRoute);
 app.use('/api', UsersRoute);
+app.use('/api', filesRoute);
 
 app.get('/status', (req,res)=>{
   res.status(200).json({
@@ -52,7 +54,7 @@ app.get('/status', (req,res)=>{
 
 //not Found                          
 app.use((req, res, next) => {
-  const error = new Error('Not found');
+  const error = new Error('Rota não encontrada');
   error.status = 404
   next(error);
 })
