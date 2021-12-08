@@ -10,9 +10,9 @@ router.get('/get_files:user_id', ImobbilesTypesController.index);
 router.post('/posts', multer(multerConfig).single('file'), async (req, res) => {
     const file=req.file;
     try {
-        const url = await imgur.uploadFile(`./uploads/${file.filename}`);
-        res.json({url:url.data.link})
-        fs.unlinkSync(`./uploads/${file.filename}`)
+        const url = await imgur.uploadFile(`./tmp/uploads/${file.filename}`);
+        res.json({url:url.link})
+        fs.unlinkSync(`./tmp/uploads/${file.filename}`)
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "server error"})
