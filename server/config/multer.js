@@ -12,12 +12,6 @@ module.exports = {
             cb(
                 null,file.fieldname+"-"+ Date.now()+path.extname(file.originalname)
             );
-            // crypto.randomBytes(16, (err, hash) => {
-            //     if(err) cb(err);
-            //     const filename = `${hash.toString('hex')}-${file.originalname}`;
-
-            //     cb(null, filename);
-            // })
         },
     }),
     limits:{

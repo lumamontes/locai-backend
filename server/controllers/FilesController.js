@@ -1,15 +1,13 @@
 const knex = require('../../database/knex');
 const imgur = require("imgur");
-const fs = require("fs");
 module.exports = {
-    async post(req, res) {
-        const file=req.files[0];
+    async index(req, res) {
         try {
-            const url = await imgur.uploadFile(`../../tmp/uploads/${file.filename}`);
-            res.json({url:url.data.link})
-            fs.unlinkSync(`../../tmp/uploads/${file.filename}`)
+            let files = await knex.from('files')
+
+            return res.json(files);          
         } catch (error) {
-            console.log(err);
+            console.log(error);
             res.status(500).json({message: "server error"})
             return response.json(error);
         }
