@@ -79,6 +79,7 @@ router.get('/me', checkAuthMiddleware, async (request, response) => {
 
         return response.status(200).json({
             email,
+            id: user.id,
             name: user.name,
             telephone: user.telephone,
             profile_picture: user.profile_picture,
