@@ -1,3 +1,7 @@
+const express = require('express');
+const imgur = require("imgur");
+const fs = require("fs");
+
 const knex = require('../../database/knex');
 module.exports = {
     async index(request, response) {
@@ -12,8 +16,8 @@ module.exports = {
         try {
             const { id } = request.params;
             let imobbiles = await knex.from('imobbiles')
-            .where({id})
-            
+                .where({ id })
+
             return response.json(imobbiles);
         } catch (error) {
             return response.json(error);
@@ -23,7 +27,7 @@ module.exports = {
         try {
             const { user_id } = request.params;
             let imobbiles = await knex.from('imobbiles')
-            .where({user_id})
+                .where({ user_id })
             return response.json(imobbiles);
         } catch (error) {
             return response.json(error);
@@ -46,8 +50,8 @@ module.exports = {
                 imobbile_neighborhood,
                 with_furniture,
                 accepts_pets,
-            } = request.body;
-            await knex('imobbiles').insert({
+            } = JSON.parse(request.body.document);
+            const imobbile = await knex('imobbiles').insert({
                 imobbile_type_id,
                 user_id,
                 ad_title,
@@ -63,9 +67,19 @@ module.exports = {
                 with_furniture,
                 accepts_pets,
             });
+
+            const imobbile_id = imobbile[0];
+
+            const url = await imgur.uploadFile(`./tmp/uploads/${request.file.filename}`);
+            await knex('files').insert({
+                imobbile_id: imobbile_id,
+                hash: url.link,
+            });
+            fs.unlinkSync(`./tmp/uploads/${request.file.filename}`);
             return response.status(201).send();
         } catch (error) {
-            next(error);
+            response.status(500).json({ message: "server error" })
+            return response.json(error);
         }
     },
     async update(request, response, next) {
@@ -87,22 +101,24 @@ module.exports = {
             } = request.body;
             const { id } = request.params;
             await knex('imobbiles')
-                .update(                
-                    {imobbile_type_id,
-                    user_id,
-                    ad_title,
-                    ad_description,
-                    ad_value,
-                    room_quantity,
-                    bathroom_quantity,
-                    imobbile_adress,
-                    imobbile_country,
-                    imobbile_state,
-                    imobbile_neighborhood,
-                    with_furniture,
-                    accepts_pets})
-                .where({id});
-                return response.send();
+                .update(
+                    {
+                        imobbile_type_id,
+                        user_id,
+                        ad_title,
+                        ad_description,
+                        ad_value,
+                        room_quantity,
+                        bathroom_quantity,
+                        imobbile_adress,
+                        imobbile_country,
+                        imobbile_state,
+                        imobbile_neighborhood,
+                        with_furniture,
+                        accepts_pets
+                    })
+                .where({ id });
+            return response.send();
         } catch (error) {
             next(error)
         }
@@ -111,9 +127,9 @@ module.exports = {
         try {
             const { id } = request.params;
             await knex('imobbiles')
-                .where({id})
+                .where({ id })
                 .del()
-                return response.send();
+            return response.send();
         } catch (error) {
             next(error)
         }
