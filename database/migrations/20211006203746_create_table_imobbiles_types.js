@@ -1,9 +1,9 @@
 
 exports.up = function(knex) {
   return knex.schema
-  .createTable('imobbiles_types', function(table){
-      table.increments('id');
-      table.string('name', 200);
+  .createTable('properties_types', function(table){
+      table.increments('id').unsigned().primary();
+      table.string('name', 200).notNullable().unique();
       table.timestamp('created_at').defaultTo(knex.fn.now());
       table.timestamp('updated_at').defaultTo(knex.fn.now());
   })
@@ -11,5 +11,5 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return knex.schema
-  .dropTable('imobbiles_types');
+  .dropTable('properties_types');
 };

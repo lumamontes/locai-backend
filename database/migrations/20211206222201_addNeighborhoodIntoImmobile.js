@@ -1,12 +1,12 @@
 
 exports.up = function(knex) {
-  return knex.schema.table('imobbiles', table=>{
-    table.string('imobbile_neighborhood', 128).after("imobbile_city")
+  return knex.schema.table('properties', table=>{
+    table.string('property_neighborhood', 128).after("property_city")
   })
 };
 
 exports.down = function(knex) {
-  return knex.schema.table('imobbiles', table=>{
-    table.dropColumn('imobbile_neighborhood')
+  return knex.schema.table('properties', table=>{
+    table.dropColumn('property_neighborhood')
   })
 };

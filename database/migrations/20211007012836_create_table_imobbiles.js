@@ -1,21 +1,21 @@
 
 exports.up = function (knex) {
     return knex.schema
-        .createTable('imobbiles', function (table) {
-            table.increments('id');
+        .createTable('properties', function (table) {
+            table.increments('id').unsigned().primary();
             table.integer('user_id').unsigned().references('users.id');
-            table.integer('imobbile_type_id').unsigned().references('imobbiles_types.id');
+            table.integer('property_type_id').unsigned().references('properties_types.id');
             table.string('ad_title', 200).notNullable();
-            table.string('ad_description', 500).notNullable();
+            table.text('ad_description').notNullable();
             table.float('ad_value').notNullable();
-            table.float('room_quantity');
-            table.float('bathroom_quantity');
-            table.string('imobbile_adress', 200);
-            table.string('imobbile_country', 200);
-            table.string('imobbile_city', 200);
-            table.string('imobbile_state', 200);
-            table.boolean('with_furniture');
-            table.boolean('accepts_pets');
+            table.float('room_quantity').notNullable();
+            table.float('bathroom_quantity').notNullable();
+            table.string('property_adress', 200).notNullable();
+            table.string('property_country', 200).notNullable();
+            table.string('property_city', 200);
+            table.string('property_state', 200);
+            table.boolean('with_furniture').defaultTo('false');
+            table.boolean('accepts_pets').defaultTo('false');
             table.timestamp('created_at').defaultTo(knex.fn.now());
             table.timestamp('updated_at').defaultTo(knex.fn.now());
         })
@@ -23,5 +23,5 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
     return knex.schema
-        .dropTable('imobbiles');
+        .dropTable('properties');
 };
