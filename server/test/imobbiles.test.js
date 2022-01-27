@@ -5,5 +5,5 @@ const gererate = function () {
     return crypto.randomBytes(20).toString('hex');
 }
 
-test('Shoud get imobbiles', async function () {
+test('Shoud get properties', async function () {
 })

@@ -33,7 +33,7 @@ module.exports = router;
 //name
 //usuario_id
 //profile_picture_id
-//imobbile_id
+//property_id
 
 // hash
 // size

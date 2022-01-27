@@ -6,13 +6,13 @@ Ferramentas: Node.JS com o QueryBuilder Knex.js para MySQL
 
 Rotas:
 
-Imobbiles
-- api/get/imobbiles
-- api/get/imobbiles/:id
-- api/get/imobbiles_user/:user_id
-- api/post/imobbiles/
-- api/put/imobbiles/:id
-- api/delete/imobbiles/:id
+Properties
+- api/get/properties
+- api/get/properties/:id
+- api/get/properties_user/:user_id
+- api/post/properties/
+- api/put/properties/:id
+- api/delete/properties/:id
 
 Users
 - api/get/users/:id
@@ -21,9 +21,9 @@ Users
 - api/post/refresh
 - api/get/me
 
-Imobbiles_types
+Properties_types
 
-- api/get/imobbiles_types
+- api/get/properties_types
 
 Documentação completa:
 https://tender-yalow-070959.netlify.app/

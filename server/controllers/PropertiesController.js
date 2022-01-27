@@ -6,8 +6,8 @@ const knex = require('../../database/knex');
 module.exports = {
     async index(request, response) {
         try {
-            let imobbiles = await knex.from('imobbiles');
-            return response.json(imobbiles);
+            let properties = await knex.from('properties');
+            return response.json(properties);
         } catch (error) {
             return response.json(error);
         }
@@ -15,10 +15,10 @@ module.exports = {
     async single_read(request, response) {
         try {
             const { id } = request.params;
-            let imobbiles = await knex.from('imobbiles')
+            let properties = await knex.from('properties')
                 .where({ id })
 
-            return response.json(imobbiles);
+            return response.json(properties);
         } catch (error) {
             return response.json(error);
         }
@@ -26,53 +26,54 @@ module.exports = {
     async single_user(request, response) {
         try {
             const { user_id } = request.params;
-            let imobbiles = await knex.from('imobbiles')
+            let properties = await knex.from('properties')
                 .where({ user_id })
-            return response.json(imobbiles);
+            return response.json(properties);
         } catch (error) {
             return response.json(error);
         }
     },
     async create(request, response, next) {
+        console.log(request.body.document);
         try {
             const {
-                imobbile_type_id,
+                property_type_id,
                 user_id,
                 ad_title,
                 ad_description,
                 ad_value,
                 room_quantity,
                 bathroom_quantity,
-                imobbile_adress,
-                imobbile_country,
-                imobbile_city,
-                imobbile_state,
-                imobbile_neighborhood,
+                property_adress,
+                property_country,
+                property_city,
+                property_state,
+                property_neighborhood,
                 with_furniture,
                 accepts_pets,
             } = JSON.parse(request.body.document);
-            const imobbile = await knex('imobbiles').insert({
-                imobbile_type_id,
+            const property = await knex('properties').insert({
+                property_type_id,
                 user_id,
                 ad_title,
                 ad_description,
                 ad_value,
                 room_quantity,
                 bathroom_quantity,
-                imobbile_adress,
-                imobbile_country,
-                imobbile_neighborhood,
-                imobbile_city,
-                imobbile_state,
+                property_adress,
+                property_country,
+                property_neighborhood,
+                property_city,
+                property_state,
                 with_furniture,
                 accepts_pets,
             });
 
-            const imobbile_id = imobbile[0];
+            const property_id = property[0];
 
             const url = await imgur.uploadFile(`./tmp/uploads/${request.file.filename}`);
             await knex('files').insert({
-                imobbile_id: imobbile_id,
+                property_id: property_id,
                 hash: url.link,
             });
             fs.unlinkSync(`./tmp/uploads/${request.file.filename}`);
@@ -85,35 +86,35 @@ module.exports = {
     async update(request, response, next) {
         try {
             const {
-                imobbile_type_id,
+                property_type_id,
                 user_id,
                 ad_title,
                 ad_description,
                 ad_value,
                 room_quantity,
                 bathroom_quantity,
-                imobbile_adress,
-                imobbile_country,
-                imobbile_state,
-                imobbile_neighborhood,
+                property_adress,
+                property_country,
+                property_state,
+                property_neighborhood,
                 with_furniture,
                 accepts_pets,
             } = request.body;
             const { id } = request.params;
-            await knex('imobbiles')
+            await knex('properties')
                 .update(
                     {
-                        imobbile_type_id,
+                        property_type_id,
                         user_id,
                         ad_title,
                         ad_description,
                         ad_value,
                         room_quantity,
                         bathroom_quantity,
-                        imobbile_adress,
-                        imobbile_country,
-                        imobbile_state,
-                        imobbile_neighborhood,
+                        property_adress,
+                        property_country,
+                        property_state,
+                        property_neighborhood,
                         with_furniture,
                         accepts_pets
                     })
@@ -126,7 +127,7 @@ module.exports = {
     async delete(request, response, next) {
         try {
             const { id } = request.params;
-            await knex('imobbiles')
+            await knex('properties')
                 .where({ id })
                 .del()
             return response.send();

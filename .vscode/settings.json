@@ -1,0 +1,11 @@
+{
+    "discord.suppressNotifications": true,
+    "discord.removeDetails": true,
+    "discord.removeLowerDetails": true,
+    "discord.removeRemoteRepository": true,
+    "discord.removeTimestamp": true,
+    "discord.swapBigAndSmallImage": true,
+    "discord.lowerDetailsIdling": "{empty}",
+    "discord.lowerDetailsDebugging": "Debugging: {workspace}Editing a {LANG} file",
+    "discord.largeImage": ""
+}

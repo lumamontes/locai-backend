@@ -5,24 +5,24 @@ create database dbprojetiv2;
 
 CREATE TABLE `files` (
   `id` int auto_increment not null,
-  `imobbile_id` int,
+  `property_id` int,
   `hash` varchar(150),
   `updated_at` timestamp,
   `created_at` timestamp,
   PRIMARY KEY (id),
-  FOREIGN KEY (imobbile_id) REFERENCES imobbiles(id)
+  FOREIGN KEY (property_id) REFERENCES properties(id)
 );
 
-CREATE TABLE `imobbiles` (
+CREATE TABLE `properties` (
   `id` int auto_increment not NULL,
-  `imobbile_type_id` int,
+  `property_type_id` int,
   `user_id` int,
   `room_quantity` float,
   `bathroom_quantity` float,
-  `imobbile_adress` varchar(150),
-  `imobbile_country` varchar(150),
-  `imobbile_city` varchar(150),
-  `imobbile_state` varchar(150),
+  `property_adress` varchar(150),
+  `property_country` varchar(150),
+  `property_city` varchar(150),
+  `property_state` varchar(150),
   `ad_description` varchar(150),
   `ad_value` float,
   `ad_title` varchar(150),
@@ -31,11 +31,11 @@ CREATE TABLE `imobbiles` (
  `updated_at` timestamp,
   `created_at` timestamp,
   PRIMARY KEY (id),
-  FOREIGN KEY (imobbile_type_id) REFERENCES imobbiles_types(id),
+  FOREIGN KEY (property_type_id) REFERENCES properties_types(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE `imobbiles_types` (
+CREATE TABLE `properties_types` (
   `id` int primary key auto_increment not null,
   `name`  varchar(80),
   `updated_at` timestamp,
@@ -44,14 +44,14 @@ CREATE TABLE `imobbiles_types` (
 
 CREATE TABLE `amenities` (
   `id` int auto_increment not null,
-  `imobbile_id` int,
+  `property_id` int,
   `name` varchar(80),
   `description` varchar(80),
   `active` boolean,
   `updated_at` timestamp,
   `created_at` timestamp,
   PRIMARY KEY (id),
-  FOREIGN KEY (imobbile_id) REFERENCES imobbiles(id)
+  FOREIGN KEY (property_id) REFERENCES properties(id)
 );
 
 CREATE TABLE `users` (
