@@ -49,7 +49,7 @@ module.exports = {
 
             return response.status(201).send();
         } catch (error) {
-            next(error);
+            return response.send('error')
         }
     },
     async sessions(request, response, next) {

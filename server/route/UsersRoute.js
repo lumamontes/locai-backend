@@ -6,6 +6,9 @@ const knex = require('../../database/knex');
 const decode = require('jwt-decode');
 const tokens = []
 
+const validation = require('../Middlewares/validationMiddleware');
+const userSchema = require('../../Validations/userValidation');
+
 function checkAuthMiddleware(request, response, next) {
     const { authorization } = request.headers;
     if (!authorization) {
@@ -64,7 +67,7 @@ function addUserInformationToRequest(request, response, next) {
 }
 
 router.get('/users/:id', UsersController.index);
-router.post('/users', UsersController.create);
+router.post('/users',validation(userSchema), UsersController.create);
 router.post('/login', UsersController.sessions);
 router.get('/me', checkAuthMiddleware, async (request, response) => {
     const email = request.user;
