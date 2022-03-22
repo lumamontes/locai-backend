@@ -1,6 +1,7 @@
 const yup = require('yup');
 
 const userSchema = yup.object({
+  body: yup.object({
 	user_type_id: yup.number(),                            
 	name: yup.string().min(5).required(),                    
 	email: yup.string().email().required(),                             
@@ -9,10 +10,8 @@ const userSchema = yup.object({
 	national_register: yup.string().nullable(),                           
 	city: yup.string().nullable(),                              
 	state: yup.string().nullable(),                              
-	profile_picture: yup.string().nullable(),                              
-	hashedPassword: yup.string().min(8).required()                            
+	profile_picture: yup.string().url().nullable(),                              
+	password: yup.string().min(8).required()     
+  }),
 });
-
-userSchema.validate()
-
 module.exports = userSchema;

@@ -34,7 +34,6 @@ module.exports = {
         }
     },
     async create(request, response, next) {
-        console.log(request.body.document);
         try {
             const {
                 property_type_id,
@@ -51,7 +50,8 @@ module.exports = {
                 property_neighborhood,
                 with_furniture,
                 accepts_pets,
-            } = JSON.parse(request.body.document);
+            } = request.body;
+            
             const property = await knex('properties').insert({
                 property_type_id,
                 user_id,
@@ -69,18 +69,17 @@ module.exports = {
                 accepts_pets,
             });
 
-            const property_id = property[0];
+            // const property_id = property[0];
 
-            const url = await imgur.uploadFile(`./tmp/uploads/${request.file.filename}`);
-            await knex('files').insert({
-                property_id: property_id,
-                hash: url.link,
-            });
-            fs.unlinkSync(`./tmp/uploads/${request.file.filename}`);
+            // const url = await imgur.uploadFile(`./tmp/uploads/${request.file.filename}`);
+            // await knex('files').insert({
+            //     property_id: property_id,
+            //     hash: url.link,
+            // });
+            // fs.unlinkSync(`./tmp/uploads/${request.file.filename}`);
             return response.status(201).send();
         } catch (error) {
-            response.status(500).json({ message: "server error" })
-            return response.json(error);
+            next(error)
         }
     },
     async update(request, response, next) {

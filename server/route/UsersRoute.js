@@ -1,73 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const UsersController = require('../controllers/UsersController');
-const jwt = require('jsonwebtoken');
 const knex = require('../../database/knex');
-const decode = require('jwt-decode');
-const tokens = []
 
-const validation = require('../Middlewares/validationMiddleware');
+const validate = require('../Middlewares/validationMiddleware');
 const userSchema = require('../../Validations/userValidation');
 
-function checkAuthMiddleware(request, response, next) {
-    const { authorization } = request.headers;
-    if (!authorization) {
-        return response
-            .status(401)
-            .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
-    }
-    
-    // const [token]   = authorization.split(' ');
-    const token = request.headers.authorization.split(' ')[1];
-    
-    if (!token) {
-        return response
-            .status(401)
-            .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
-    }
-    try {
-        const decoded = jwt.verify(token, 'supersecret');
-        request.user = decoded.sub;
-        return next();
-    } catch (err) {
-        return response
-            .status(401)
-            .json({ error: true, code: 'token.expired', message: 'Sessão expirada. Realize login novamente! :)' })
-    }
-}
+const checkAuthMiddleware = require('../Middlewares/checkAuthMiddleware');
 
-function addUserInformationToRequest(request, response, next) {
-    const { authorization } = request.headers;
-
-    if (!authorization) {
-        return response
-            .status(401)
-            .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
-    }
-
-    const [token] = authorization.split(' ');
-
-    if (!token) {
-        return response
-            .status(401)
-            .json({ error: true, code: 'token.invalid', message: 'Token not present.' })
-    }
-
-
-    try {
-        const decoded = decode(token);
-
-        request.user = decoded.sub;
-        return next();
-    } catch (err) {
-        return response
-            .status(401)
-            .json({ error: true, code: 'token.invalid', message: 'Invalid token format.' })
-    }
-}
 
 router.get('/users/:id', UsersController.index);
-router.post('/users',validation(userSchema), UsersController.create);
+router.post('/users',validate(userSchema), UsersController.create);
 router.post('/login', UsersController.sessions);
 router.get('/me', checkAuthMiddleware, async (request, response) => {
     const email = request.user;

@@ -1,12 +1,14 @@
-const validation = (schema) => async (req, res, next) => {
-    const body = req.body;
+const validate = (schema) => async (req, res, next) => {
     try {
-        await schema.validate(body);
-        next();
-        return next();
-    } catch (error) {
-        return res.status(400).json({error})
+      await schema.validate({
+        body: req.body,
+        query: req.query,
+        params: req.params,
+      });
+      return next();
+    } catch (err) {
+      return res.status(500).json({ type: err.name, message: err.message });
     }
-}
+  };
 
-module.exports = validation
+module.exports = validate
