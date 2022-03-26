@@ -9,7 +9,7 @@ const userSchema = require('../../Validations/userValidation');
 const checkAuthMiddleware = require('../Middlewares/checkAuthMiddleware');
 
 
-router.get('/users/:id', UsersController.index);
+router.get('/users/:id', checkAuthMiddleware, UsersController.index);
 router.post('/users',validate(userSchema), UsersController.create);
 router.post('/login', UsersController.sessions);
 router.get('/me', checkAuthMiddleware, async (request, response) => {
@@ -33,6 +33,6 @@ router.get('/me', checkAuthMiddleware, async (request, response) => {
         })
     }
 });
-router.get('/usertypes', UsersController.userTypes)
+router.get('/usertypes', checkAuthMiddleware, UsersController.userTypes)
 
 module.exports = router;

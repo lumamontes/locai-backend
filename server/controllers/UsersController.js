@@ -17,8 +17,18 @@ module.exports = {
             return response.json(error);
         }
     },
-    async create(request, response, next) {
+    async teste(request, response) {
         try {
+            let users = await knex.from('users');
+            return response.json(users);
+        } catch (error) {
+            return response.json(error);
+        }
+    },
+    async create(request, response) {
+        
+        try {
+
             const {
                 user_type_id,
                 name,
@@ -31,25 +41,37 @@ module.exports = {
                 profile_picture,
                 password
             } = request.body;
+            
+            let users = await knex.from('users').where({email});
 
-            let hashedPassword = await bcrypt.hash(password, 8);
+            if(users.length == 0){
+                let hashedPassword = await bcrypt.hash(password, 8);
+    
+                await knex('users').insert({
+                    user_type_id,
+                    name,
+                    email,
+                    telephone,
+                    birth_date,
+                    national_register,
+                    city,
+                    state,
+                    profile_picture,
+                    password: hashedPassword
+                });
+    
+                return response.status(201).send();
+            }else{
+                return response.
+                status(200)
+                .json({
+                    error: true,
+                    message: 'Já existe um usuário com esse e-mail cadastrado!'
+                });
+            }
 
-            await knex('users').insert({
-                user_type_id,
-                name,
-                email,
-                telephone,
-                birth_date,
-                national_register,
-                city,
-                state,
-                profile_picture,
-                password: hashedPassword
-            });
-
-            return response.status(201).send();
         } catch (error) {
-            return response.send('error')
+            console.log(error)
         }
     },
     async sessions(request, response, next) {
@@ -57,7 +79,7 @@ module.exports = {
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
                 subject: email,
-                expiresIn: 60 * 60 * 60 * 60, // 15 minutes
+                expiresIn: 60* 60, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
             return {
@@ -65,7 +87,7 @@ module.exports = {
                 refreshToken,
             }
         }
-        function createRefreshToken(email, token) {
+        function createRefreshToken(email) {
             const currentUserTokens = [];
             const refreshToken = uuid();
             tokens.push(email, [...currentUserTokens, refreshToken])
@@ -91,16 +113,18 @@ module.exports = {
                     if (await bcrypt.compare(password, user.password)) {
 
                         const { token, refreshToken } = generateJwtAndRefreshToken(email, {
-                            permissions: user.permissions,
-                        })
-                        return response.json({
-                            id: user.id,
-                            token,
-                            refreshToken,
-                            user_type_id: user.user_type_id,
-                            name: user.name,
-                            telephone: user.telephone,
-                        })
+                                user_id: user.id,
+                                permission: user.user_type_id
+                            })
+                        return response.
+                            status(200)
+                            .json({
+                                id: user.id,
+                                token,
+                                refreshToken,
+                                user_type_id: user.user_type_id,
+                                message: 'Login com sucesso! :)'
+                            });
                     } else {
                         return response.
                             status(401)
@@ -110,7 +134,6 @@ module.exports = {
                             });
                     }
                 } catch (err) {
-                    console.log(err);
                     next(err);
                 }
             }
@@ -124,7 +147,7 @@ module.exports = {
        } catch (error) {
            console.log(error)
        }
-    }
+    },
     
 }
 

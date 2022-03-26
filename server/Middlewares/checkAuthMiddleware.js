@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 function checkAuthMiddleware(request, response, next) {
     const { authorization } = request.headers;
     if (!authorization) {
@@ -8,7 +10,6 @@ function checkAuthMiddleware(request, response, next) {
     
     // const [token]   = authorization.split(' ');
     const token = request.headers.authorization.split(' ')[1];
-    
     if (!token) {
         return response
             .status(401)
@@ -16,7 +17,7 @@ function checkAuthMiddleware(request, response, next) {
     }
     try {
         const decoded = jwt.verify(token, 'supersecret');
-        request.user = decoded.sub;
+        request.user = decoded;
         return next();
     } catch (err) {
         return response
