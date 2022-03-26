@@ -4,6 +4,7 @@ const PropertiesRoutes = require('./route/PropertiesRoute')
 const PropertiesTypesRoute = require('./route/PropertiesTypesRoute')
 const UsersRoute = require('./route/UsersRoute')
 const filesRoute = require('./route/filesRoute')
+const UserFavoritesRoute = require('./route/UserFavoritesRoute')
 const session = require("express-session");
 const cookieParser = require('cookie-parser');
 
@@ -33,6 +34,7 @@ app.use('/api', PropertiesRoutes);
 app.use('/api', PropertiesTypesRoute);
 app.use('/api', UsersRoute);
 app.use('/api', filesRoute);
+app.use('/api', UserFavoritesRoute);
 
 app.get('/status', (req,res)=>{
   res.status(200).json({
