@@ -26,15 +26,3 @@ router.post('/posts', multer(multerConfig).single('file'), async (req, res) => {
 });
 
 module.exports = router;
-
-// campos:
-
-//type
-//name
-//usuario_id
-//profile_picture_id
-//property_id
-
-// hash
-// size
-// extension

@@ -51,15 +51,15 @@ module.exports = {
             accepts_pets,
         } = request.body;
         let users = await knex.from('users')
-        .where('id', user_id );
-        if(users.length == 0){
+            .where('id', user_id);
+        if (users.length == 0) {
             return response.
-            status(400)
-            .json({
-                error: true,
-                message: 'Usuário inválido'
-            });
-        }else{
+                status(400)
+                .json({
+                    error: true,
+                    message: 'Usuário inválido'
+                });
+        } else {
             try {
                 const property = await knex('properties').insert({
                     property_type_id,
@@ -78,7 +78,7 @@ module.exports = {
                     accepts_pets,
                 });
                 // const property_id = property[0];
-    
+
                 // const url = await imgur.uploadFile(`./tmp/uploads/${request.file.filename}`);
                 // await knex('files').insert({
                 //     property_id: property_id,
@@ -88,7 +88,7 @@ module.exports = {
                 return response.status(201).json({
                     message: 'Cadastro com sucesso!'
                 });
-                
+
             } catch (error) {
                 console.log(error)
             }

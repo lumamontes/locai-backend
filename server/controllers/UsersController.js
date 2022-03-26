@@ -17,16 +17,7 @@ module.exports = {
             return response.json(error);
         }
     },
-    async teste(request, response) {
-        try {
-            let users = await knex.from('users');
-            return response.json(users);
-        } catch (error) {
-            return response.json(error);
-        }
-    },
     async create(request, response) {
-        
         try {
 
             const {
@@ -41,12 +32,12 @@ module.exports = {
                 profile_picture,
                 password
             } = request.body;
-            
-            let users = await knex.from('users').where({email});
 
-            if(users.length == 0){
+            let users = await knex.from('users').where({ email });
+
+            if (users.length == 0) {
                 let hashedPassword = await bcrypt.hash(password, 8);
-    
+
                 await knex('users').insert({
                     user_type_id,
                     name,
@@ -59,15 +50,15 @@ module.exports = {
                     profile_picture,
                     password: hashedPassword
                 });
-    
+
                 return response.status(201).send();
-            }else{
+            } else {
                 return response.
-                status(200)
-                .json({
-                    error: true,
-                    message: 'Já existe um usuário com esse e-mail cadastrado!'
-                });
+                    status(200)
+                    .json({
+                        error: true,
+                        message: 'Já existe um usuário com esse e-mail cadastrado!'
+                    });
             }
 
         } catch (error) {
@@ -79,7 +70,7 @@ module.exports = {
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
                 subject: email,
-                expiresIn: 60* 60, // 15 minutes
+                expiresIn: 60 * 60, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
             return {
@@ -113,9 +104,10 @@ module.exports = {
                     if (await bcrypt.compare(password, user.password)) {
 
                         const { token, refreshToken } = generateJwtAndRefreshToken(email, {
-                                user_id: user.id,
-                                permission: user.user_type_id
-                            })
+                            user_id: user.id,
+                            name: user.name,
+                            permission: user.user_type_id
+                        })
                         return response.
                             status(200)
                             .json({
@@ -123,6 +115,7 @@ module.exports = {
                                 token,
                                 refreshToken,
                                 user_type_id: user.user_type_id,
+                                name: user.name,
                                 message: 'Login com sucesso! :)'
                             });
                     } else {
@@ -140,15 +133,15 @@ module.exports = {
         }
     },
 
-    async userTypes(req,res){
-       try {
-        const userTypes = await knex.from('user_types')
-         res.status(201).json(userTypes)
-       } catch (error) {
-           console.log(error)
-       }
+    async userTypes(req, res) {
+        try {
+            const userTypes = await knex.from('user_types')
+            res.status(201).json(userTypes)
+        } catch (error) {
+            console.log(error)
+        }
     },
-    
+
 }
 
 
