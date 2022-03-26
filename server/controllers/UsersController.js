@@ -19,7 +19,6 @@ module.exports = {
     },
     async create(request, response) {
         try {
-
             const {
                 user_type_id,
                 name,
@@ -70,7 +69,7 @@ module.exports = {
         function generateJwtAndRefreshToken(email, payload = {}) {
             const token = jwt.sign(payload, 'supersecret', {
                 subject: email,
-                expiresIn: 60 * 60, // 15 minutes
+                expiresIn: 60 * 60 * 60 * 60, // 15 minutes
             });
             const refreshToken = createRefreshToken(email, token)
             return {
@@ -115,8 +114,7 @@ module.exports = {
                                 token,
                                 refreshToken,
                                 user_type_id: user.user_type_id,
-                                name: user.name,
-                                message: 'Login com sucesso! :)'
+                                name: user.name
                             });
                     } else {
                         return response.

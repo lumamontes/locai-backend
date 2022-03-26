@@ -8,7 +8,12 @@ module.exports = {
                 const favorites = await knex.from('user_favorites').where({ user_id });
                 response.status(201).json(favorites);
             } catch (error) {
-                console.log(error);
+                return response.
+                status(400)
+                .json({
+                    error: true,
+                    message: 'Erro ao retornar favoritos'
+                });
             }
         } else {
             return response.
@@ -40,6 +45,7 @@ module.exports = {
                     status(200)
                     .send();
             } catch (error) {
+                console.log(error);
                 return response.
                     status(400)
                     .json({
@@ -48,6 +54,17 @@ module.exports = {
                     });
             }
 
+        }
+    },
+    async delete(request, response, next) {
+        try {
+            const { id } = request.params;
+            await knex('user_favorites')
+                .where({ id })
+                .del()
+            return response.send();
+        } catch (error) {
+            next(error)
         }
     }
 }
