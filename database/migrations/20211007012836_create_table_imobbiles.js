@@ -3,7 +3,7 @@ exports.up = function (knex) {
     return knex.schema
         .createTable('properties', function (table) {
             table.increments('id').unsigned().primary();
-            table.integer('user_id').unsigned().references('users.id');
+            table.integer('user_id').unsigned().references('users.id').onUpdate('CASCADE').onDelete('CASCADE');;
             table.integer('property_type_id').unsigned().references('properties_types.id');
             table.string('ad_title', 200).notNullable();
             table.text('ad_description').notNullable();
