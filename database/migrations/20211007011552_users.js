@@ -2,8 +2,9 @@
 exports.up = function (knex) {
     return knex.schema
         .createTable('users', function (table) {
-            table.increments('id').unsigned().primary();
-            table.integer('user_type_id').unsigned().references('user_types.id');
+            table.uuid("id").primary().defaultTo(knex.raw("(UUID())"));
+            table.boolean('is_admin').defaultTo('false');
+            table.boolean('is_realtor').defaultTo('false');
             table.string('name', 200).notNullable();
             table.string('email', 200).unique().notNullable();
             table.string('telephone', 200).notNullable();

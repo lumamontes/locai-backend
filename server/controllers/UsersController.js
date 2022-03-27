@@ -20,8 +20,9 @@ module.exports = {
     async create(request, response) {
         try {
             const {
-                user_type_id,
                 name,
+                is_admin,
+                is_realtor,
                 email,
                 telephone,
                 birth_date,
@@ -38,8 +39,9 @@ module.exports = {
                 let hashedPassword = await bcrypt.hash(password, 8);
 
                 await knex('users').insert({
-                    user_type_id,
                     name,
+                    is_admin,
+                    is_realtor,
                     email,
                     telephone,
                     birth_date,
@@ -105,7 +107,8 @@ module.exports = {
                         const { token, refreshToken } = generateJwtAndRefreshToken(email, {
                             user_id: user.id,
                             name: user.name,
-                            permission: user.user_type_id
+                            is_admin: user.is_admin,
+                            is_realtor: user.is_realtor
                         })
                         return response.
                             status(200)
@@ -113,7 +116,8 @@ module.exports = {
                                 id: user.id,
                                 token,
                                 refreshToken,
-                                user_type_id: user.user_type_id,
+                                is_admin: user.is_admin,
+                                is_realtor: user.is_realtor,
                                 name: user.name
                             });
                     } else {
@@ -131,6 +135,18 @@ module.exports = {
         }
     },
 
+    async delete(request, response, next) {
+        try {
+            const { id } = request.params;
+            await knex('users')
+                .where({ id })
+                .del()
+            return response.send();
+        } catch (error) {
+            next(error)
+        }
+    },
+
     async userTypes(req, res) {
         try {
             const userTypes = await knex.from('user_types')
@@ -140,6 +156,44 @@ module.exports = {
         }
     },
 
+    async update(request, response, next) {
+        try {
+            const {
+                is_admin,
+                is_realtor,
+                name,
+                email,
+                telephone,
+                birth_date,
+                national_register,
+                city,
+                state,
+                profile_picture,
+                password
+            } = request.body;
+
+            const { id } = request.params;
+            await knex('users')
+                .update(
+                    {
+                        is_admin,
+                        is_realtor,
+                        name,
+                        email,
+                        telephone,
+                        birth_date,
+                        national_register,
+                        city,
+                        state,
+                        profile_picture,
+                        password
+                    })
+                .where({ id });
+            return response.send();
+        } catch (error) {
+            next(error)
+        }
+    },
 }
 
 

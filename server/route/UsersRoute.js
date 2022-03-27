@@ -29,10 +29,13 @@ router.get('/me', checkAuthMiddleware, async (request, response) => {
             name: user.name,
             telephone: user.telephone,
             profile_picture: user.profile_picture,
-            user_type_id: user.user_type_id,
+            is_admin: user.is_admin,
+            is_realtor: user.is_realtor,
         })
     }
 });
 router.get('/usertypes', checkAuthMiddleware, UsersController.userTypes)
+router.delete('/users/:id', checkAuthMiddleware, UsersController.delete)
+router.put('/users/:id', checkAuthMiddleware, UsersController.update)
 
 module.exports = router;

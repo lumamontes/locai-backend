@@ -2,7 +2,6 @@ const yup = require('yup');
 
 const userSchema = yup.object({
   body: yup.object({
-	user_type_id: yup.number(),                            
 	name: yup.string().min(5).required(),                    
 	email: yup.string().email().required(),                             
 	telephone: yup.string(),                              

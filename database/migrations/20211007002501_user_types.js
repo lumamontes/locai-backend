@@ -2,7 +2,7 @@
 exports.up = function(knex) {
     return knex.schema
     .createTable('user_types', function(table){
-        table.increments('id').unsigned().primary();
+        table.uuid("id").primary().defaultTo(knex.raw("(UUID())"));
         table.string('name', 200).notNullable().unique();
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());

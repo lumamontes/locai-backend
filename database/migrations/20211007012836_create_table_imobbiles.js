@@ -2,9 +2,15 @@
 exports.up = function (knex) {
     return knex.schema
         .createTable('properties', function (table) {
-            table.increments('id').unsigned().primary();
-            table.integer('user_id').unsigned().references('users.id').onUpdate('CASCADE').onDelete('CASCADE');;
-            table.integer('property_type_id').unsigned().references('properties_types.id');
+            table.uuid('id').primary().defaultTo(knex.raw("(UUID())"));
+            table.uuid('user_id')
+                .references('users.id')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
+            table.uuid('property_type_id')
+                .references('properties_types.id')
+                .onUpdate('CASCADE')
+                .onDelete('CASCADE');
             table.string('ad_title', 200).notNullable();
             table.text('ad_description').notNullable();
             table.float('ad_value').notNullable();
