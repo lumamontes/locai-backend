@@ -84,12 +84,18 @@ module.exports = {
                 .returning('id')
                 .then(async  id => {
                     for (let i = 0; i < request.files.length; i++) {
-                        const url = await imgur.uploadFile(`./tmp/uploads/${request.files[i].filename}`);
-                        await knex('files').insert({
-                            property_id: id[0],
-                            url: url.link,
-                        });
-                        fs.unlinkSync(`./tmp/uploads/${request.files[i].filename}`);
+                        try {
+                            const url = await imgur.uploadFile(`./tmp/uploads/${request.files[i].filename}`);
+                            await knex('files').insert({
+                                property_id: id[0],
+                                url: url.link,
+                            });
+                            fs.unlinkSync(`./tmp/uploads/${request.files[i].filename}`);
+                        } catch (error) {
+                            return response.status(400).json({
+                                message: error.message,
+                            });          
+                        }
                     }
                     return response.status(201).json({
                         property_id: id[0],
