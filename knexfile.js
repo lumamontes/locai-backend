@@ -2,13 +2,13 @@
 require('dotenv').config()
 module.exports = {
     development: {
-    client: 'mysql',
+    client: 'pg',
     connection: {
       host : 'localhost',
-      port : 3306,
-      user : 'root',
-      password : '123456789',
-      database : 'dbprojetiv3',
+      // port : 3306,
+      user : 'postgres',
+      // password : '123456789',
+      database : 'tcc',
       charset: 'utf8'
     },
     migrations: {
@@ -16,10 +16,9 @@ module.exports = {
     },
     seeds: {
       directory: __dirname + '/database/seeds',
-    }
-
+    },
+    // debug:true
   },
-
   staging: {
     client: 'postgresql',
     connection: {
