@@ -14,7 +14,7 @@ router.post('/posts', multer(multerConfig).single('file'), async (req, res) => {
         // console.log(req);
         const url = await imgur.uploadFile(`./tmp/uploads/${file.filename}`);
         await knex('files').insert({
-            hash: url.link, 
+            url: url.link, 
         });
         fs.unlinkSync(`./tmp/uploads/${file.filename}`);
         return res.status(201).send();            
