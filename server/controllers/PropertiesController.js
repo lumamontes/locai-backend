@@ -1,7 +1,6 @@
 const express = require('express');
 const imgur = require("imgur");
 const fs = require("fs");
-
 const knex = require('../../database/knex');
 module.exports = {
     async index(request, response) {
@@ -81,13 +80,13 @@ module.exports = {
                     with_furniture,
                     accepts_pets,
                 })
-                .returning('id')
-                .then(id => {
-                    return response.status(201).json({
-                        property_id: id,
-                        message: 'Cadastro com sucesso!'
+                    .returning('id')
+                    .then(id => {
+                        return response.status(201).json({
+                            property_id: id,
+                            message: 'Cadastro com sucesso!'
+                        });
                     });
-                });
                 // const property_id = property[0];
 
                 // const url = await imgur.uploadFile(`./tmp/uploads/${request.file.filename}`);
@@ -98,7 +97,7 @@ module.exports = {
                 // fs.unlinkSync(`./tmp/uploads/${request.file.filename}`);
 
 
-            } catch(error) {
+            } catch (error) {
                 console.log(error);
                 return response.json({
                     message: error.message,

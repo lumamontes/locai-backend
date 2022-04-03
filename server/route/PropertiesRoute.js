@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const PropertiesController = require('../controllers/PropertiesController');
-const multer = require('multer');
-const multerConfig = require('../config/multer');
 const checkAuthMiddleware = require('../Middlewares/checkAuthMiddleware');
 
 router.get('/properties', PropertiesController.index);

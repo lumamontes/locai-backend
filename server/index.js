@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const PropertiesRoutes = require('./route/PropertiesRoute')
 const PropertiesTypesRoute = require('./route/PropertiesTypesRoute')
+const PropertiesCategoriesRoute = require('./route/PropertiesCategoriesRoute')
 const UsersRoute = require('./route/UsersRoute')
 const filesRoute = require('./route/filesRoute')
 const UserFavoritesRoute = require('./route/UserFavoritesRoute')
@@ -32,6 +33,7 @@ app.use(cookieParser("secredcode"))
 app.options('*', cors())
 app.use('/api', PropertiesRoutes);
 app.use('/api', PropertiesTypesRoute);
+app.use('/api', PropertiesCategoriesRoute);
 app.use('/api', UsersRoute);
 app.use('/api', filesRoute);
 app.use('/api', UserFavoritesRoute);

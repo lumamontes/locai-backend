@@ -34,7 +34,6 @@ router.get('/me', checkAuthMiddleware, async (request, response) => {
         })
     }
 });
-router.get('/usertypes', checkAuthMiddleware, UsersController.userTypes)
 router.delete('/users/:id', checkAuthMiddleware, UsersController.delete)
 router.put('/users/:id', checkAuthMiddleware, UsersController.update)
 
