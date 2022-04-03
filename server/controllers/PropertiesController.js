@@ -36,12 +36,14 @@ module.exports = {
     async create(request, response, next) {
         const {
             property_type_id,
+            category_id,
             user_id,
             ad_title,
             ad_description,
             ad_value,
             room_quantity,
             bathroom_quantity,
+            garage_quantity,
             property_adress,
             property_country,
             property_city,
@@ -61,14 +63,16 @@ module.exports = {
                 });
         } else {
             try {
-                const property = await knex('properties').insert({
+                let teste = await knex('properties').insert({
                     property_type_id,
+                    category_id,
                     user_id,
                     ad_title,
                     ad_description,
                     ad_value,
                     room_quantity,
                     bathroom_quantity,
+                    garage_quantity,
                     property_adress,
                     property_country,
                     property_neighborhood,
@@ -76,6 +80,13 @@ module.exports = {
                     property_state,
                     with_furniture,
                     accepts_pets,
+                })
+                .returning('id')
+                .then(id => {
+                    return response.status(201).json({
+                        property_id: id,
+                        message: 'Cadastro com sucesso!'
+                    });
                 });
                 // const property_id = property[0];
 
@@ -85,12 +96,13 @@ module.exports = {
                 //     hash: url.link,
                 // });
                 // fs.unlinkSync(`./tmp/uploads/${request.file.filename}`);
-                return response.status(201).json({
-                    message: 'Cadastro com sucesso!'
-                });
 
-            } catch (error) {
-                console.log(error)
+
+            } catch(error) {
+                console.log(error);
+                return response.json({
+                    message: error.message,
+                })
             }
 
         }
@@ -99,12 +111,14 @@ module.exports = {
         try {
             const {
                 property_type_id,
+                category_id,
                 user_id,
                 ad_title,
                 ad_description,
                 ad_value,
                 room_quantity,
                 bathroom_quantity,
+                garage_quantity,
                 property_adress,
                 property_country,
                 property_state,
@@ -117,12 +131,14 @@ module.exports = {
                 .update(
                     {
                         property_type_id,
+                        category_id,
                         user_id,
                         ad_title,
                         ad_description,
                         ad_value,
                         room_quantity,
                         bathroom_quantity,
+                        garage_quantity,
                         property_adress,
                         property_country,
                         property_state,
@@ -133,7 +149,11 @@ module.exports = {
                 .where({ id });
             return response.send();
         } catch (error) {
-            next(error)
+            console.log(error);
+            return response.json({
+                error: error.name,
+                message: error.message,
+            })
         }
     },
     async delete(request, response, next) {

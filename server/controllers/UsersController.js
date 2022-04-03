@@ -146,16 +146,6 @@ module.exports = {
             next(error)
         }
     },
-
-    async userTypes(req, res) {
-        try {
-            const userTypes = await knex.from('user_types')
-            res.status(201).json(userTypes)
-        } catch (error) {
-            console.log(error)
-        }
-    },
-
     async update(request, response, next) {
         try {
             const {
