@@ -3,8 +3,12 @@ exports.up = function(knex) {
     return knex.schema
     .createTable('files', function(table){
       table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
-      table.uuid('property_type_id')
-          .references('properties_types.id')
+      table.uuid('property_id')
+          .references('properties.id')
+          .onUpdate('CASCADE')
+          .onDelete('CASCADE');
+      table.uuid('user_id')
+          .references('users.id')
           .onUpdate('CASCADE')
           .onDelete('CASCADE');
         table.string('url', 300);
