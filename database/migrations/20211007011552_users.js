@@ -2,7 +2,7 @@
 exports.up = function (knex) {
     return knex.schema
         .createTable('users', function (table) {
-            table.uuid("id").primary().defaultTo(knex.raw("(UUID())"));
+            table.uuid('id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
             table.boolean('is_admin').defaultTo('false');
             table.boolean('is_realtor').defaultTo('false');
             table.string('name', 200).notNullable();
