@@ -2,6 +2,7 @@ const express = require('express');
 const imgur = require("imgur");
 const fs = require("fs");
 const knex = require('../../database/knex');
+
 module.exports = {
     async index(request, response) {
         try {
@@ -80,25 +81,22 @@ module.exports = {
                     with_furniture,
                     accepts_pets,
                 })
-                    .returning('id')
-                    .then(id => {
-                        return response.status(201).json({
-                            property_id: id,
-                            message: 'Cadastro com sucesso!'
+                .returning('id')
+                .then(async  id => {
+                    for (let i = 0; i < request.files.length; i++) {
+                        const url = await imgur.uploadFile(`./tmp/uploads/${request.files[i].filename}`);
+                        await knex('files').insert({
+                            property_id: id[0],
+                            url: url.link,
                         });
+                        fs.unlinkSync(`./tmp/uploads/${request.files[i].filename}`);
+                    }
+                    return response.status(201).json({
+                        property_id: id[0],
+                        message: 'Cadastro com sucesso!'
                     });
-                // const property_id = property[0];
-
-                // const url = await imgur.uploadFile(`./tmp/uploads/${request.file.filename}`);
-                // await knex('files').insert({
-                //     property_id: property_id,
-                //     hash: url.link,
-                // });
-                // fs.unlinkSync(`./tmp/uploads/${request.file.filename}`);
-
-
+                });
             } catch (error) {
-                console.log(error);
                 return response.json({
                     message: error.message,
                 })
