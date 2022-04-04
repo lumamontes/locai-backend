@@ -50,9 +50,15 @@ module.exports = {
                     state,
                     profile_picture,
                     password: hashedPassword
-                });
-
-                return response.status(201).send();
+                })
+                return response.status(201).json(
+                    {
+                        message: 'Cadastro feito com sucesso! :)',
+                        email,
+                        password
+                    }
+                );
+                ;
             } else {
                 return response.
                     status(200)
