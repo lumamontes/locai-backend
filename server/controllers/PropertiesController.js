@@ -6,7 +6,7 @@ const knex = require('../../database/knex');
 module.exports = {
     async index(request, response) {
         try {
-            let properties = await knex.from('properties');
+            let properties = await knex.from('files').innerJoin('properties', 'properties.id', '=', 'files.property_id');
             return response.json(properties);
         } catch (error) {
             return response.json(error);
