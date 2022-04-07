@@ -16,6 +16,7 @@ exports.up = function (knex) {
                 .onUpdate('CASCADE')
                 .onDelete('CASCADE');
             table.string('ad_title', 200).notNullable();
+            table.string('ad_image', 200).notNullable();
             table.text('ad_description').notNullable();
             table.float('ad_value').notNullable();
             table.float('room_quantity').notNullable();

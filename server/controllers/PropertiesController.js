@@ -6,7 +6,7 @@ const knex = require('../../database/knex');
 module.exports = {
     async index(request, response) {
         try {
-            let properties = await knex.from('files').innerJoin('properties', 'properties.id', '=', 'files.property_id');
+            let properties = await knex.from('properties');
             return response.json(properties);
         } catch (error) {
             return response.json(error);
@@ -81,27 +81,36 @@ module.exports = {
                     with_furniture,
                     accepts_pets,
                 })
-                .returning('id')
-                .then(async  id => {
-                    for (let i = 0; i < request.files.length; i++) {
-                        try {
-                            const url = await imgur.uploadFile(`./tmp/uploads/${request.files[i].filename}`);
-                            await knex('files').insert({
-                                property_id: id[0],
-                                url: url.link,
-                            });
-                            fs.unlinkSync(`./tmp/uploads/${request.files[i].filename}`);
-                        } catch (error) {
-                            return response.status(400).json({
-                                message: error.message,
-                            });          
+                    .returning('id')
+                    .then(async id => {
+                        for (let i = 0; i < request.files.length; i++) {
+                            try {
+                                const url = await imgur.uploadFile(`./tmp/uploads/${request.files[i].filename}`);
+                                await knex('files').insert({
+                                    property_id: id[0],
+                                    url: url.link,
+                                })
+                                if (request.files[0]) {
+                                    try {
+                                        await knex('properties').where('id', '=', id[0]).update({
+                                            ad_image: url.link
+                                        })
+                                    } catch (err) {
+                                        console.log(error);
+                                    }
+                                };
+                                fs.unlinkSync(`./tmp/uploads/${request.files[i].filename}`);
+                            } catch (error) {
+                                return response.status(400).json({
+                                    message: error.message,
+                                });
+                            }
                         }
-                    }
-                    return response.status(201).json({
-                        property_id: id[0],
-                        message: 'Cadastro com sucesso!'
+                        return response.status(201).json({
+                            property_id: id[0],
+                            message: 'Cadastro com sucesso!'
+                        });
                     });
-                });
             } catch (error) {
                 return response.json({
                     message: error.message,
