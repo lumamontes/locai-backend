@@ -12,6 +12,7 @@ module.exports = {
                 status(400)
                 .json({
                     error: true,
+                    code: 'user_favorites.invalid',
                     message: 'Erro ao retornar favoritos'
                 });
             }
@@ -20,6 +21,7 @@ module.exports = {
                 status(400)
                 .json({
                     error: true,
+                    code: 'user.invalid',
                     message: 'Usuário inválido'
                 });
         }
@@ -33,6 +35,7 @@ module.exports = {
                 status(400)
                 .json({
                     error: true,
+                    code: 'property.not_found',
                     message: 'Não foi possível encontrar a propriedade para favoritar'
                 });
         } else {
@@ -50,6 +53,7 @@ module.exports = {
                     status(400)
                     .json({
                         error: true,
+                        code: 'property.invalid',
                         message: 'Não foi possível favoritar a propriedade'
                     });
             }

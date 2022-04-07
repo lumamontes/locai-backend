@@ -22,7 +22,7 @@ function checkAuthMiddleware(request, response, next) {
     } catch (err) {
         return response
             .status(401)
-            .json({ error: true, code: 'token.expired', message: 'Sessão expirada. Realize login novamente! :)' })
+            .json({ error: true, code: 'token.expired', message: 'Sessão expirada. Realize login novamente!' })
     }
 }
 

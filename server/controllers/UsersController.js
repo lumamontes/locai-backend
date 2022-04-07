@@ -64,6 +64,7 @@ module.exports = {
                     status(200)
                     .json({
                         error: true,
+                        code: 'user.email_already_exists',
                         message: 'Já existe um usuário com esse e-mail cadastrado!'
                     });
             }
@@ -103,6 +104,7 @@ module.exports = {
                 status(401)
                 .json({
                     error: true,
+                    code: 'user.not_found',                   
                     message: 'Não foi possível encontrar o usuário'
                 });
         } else {
@@ -131,6 +133,7 @@ module.exports = {
                             status(401)
                             .json({
                                 error: true,
+                                code: 'user.invalid_password',
                                 message: 'Senha incorreta'
                             });
                     }
