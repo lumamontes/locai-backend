@@ -8,6 +8,8 @@ exports.up = function (knex) {
             table.string('name', 200).notNullable();
             table.string('email', 200).unique().notNullable();
             table.string('telephone', 200).notNullable();
+            table.string('profession', 200);
+            table.text('biography');
             table.date('birth_date');
             table.float('national_register');
             table.string('city', 200);
