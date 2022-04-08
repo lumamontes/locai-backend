@@ -68,13 +68,17 @@ module.exports = {
                 room_quantity,
                 bathroom_quantity,
                 garage_quantity,
+                beds_quantity,
                 property_adress,
                 property_country,
+                property_neighborhood,
                 property_city,
                 property_state,
-                property_neighborhood,
                 with_furniture,
                 accepts_pets,
+                year_constructed,
+                property_area,
+                land_area
             } = request.body;
             let users = await knex.from('users')
                 .where('id', user_id);
@@ -98,6 +102,7 @@ module.exports = {
                         room_quantity,
                         bathroom_quantity,
                         garage_quantity,
+                        beds_quantity,
                         property_adress,
                         property_country,
                         property_neighborhood,
@@ -105,6 +110,9 @@ module.exports = {
                         property_state,
                         with_furniture,
                         accepts_pets,
+                        year_constructed,
+                        property_area,
+                        land_area
                     })
                         .returning('id')
                         .then(async id => {
@@ -156,12 +164,17 @@ module.exports = {
                     room_quantity,
                     bathroom_quantity,
                     garage_quantity,
+                    beds_quantity,
                     property_adress,
                     property_country,
-                    property_state,
                     property_neighborhood,
+                    property_city,
+                    property_state,
                     with_furniture,
                     accepts_pets,
+                    year_constructed,
+                    property_area,
+                    land_area
                 } = request.body;
                 const { id } = request.params;
                 await knex('properties')
@@ -176,12 +189,17 @@ module.exports = {
                             room_quantity,
                             bathroom_quantity,
                             garage_quantity,
+                            beds_quantity,
                             property_adress,
                             property_country,
-                            property_state,
                             property_neighborhood,
+                            property_city,
+                            property_state,
                             with_furniture,
-                            accepts_pets
+                            accepts_pets,
+                            year_constructed,
+                            property_area,
+                            land_area
                         })
                     .where({ id });
                 return response.send();

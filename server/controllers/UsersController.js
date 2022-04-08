@@ -20,17 +20,19 @@ module.exports = {
     async create(request, response) {
         try {
             const {
-                name,
                 is_admin,
                 is_realtor,
+                name,
                 email,
                 telephone,
+                profession,
+                biography,
                 birth_date,
                 national_register,
                 city,
                 state,
                 profile_picture,
-                password
+                password,
             } = request.body;
 
             let users = await knex.from('users').where({ email });
@@ -39,11 +41,13 @@ module.exports = {
                 let hashedPassword = await bcrypt.hash(password, 8);
 
                 await knex('users').insert({
-                    name,
                     is_admin,
                     is_realtor,
+                    name,
                     email,
                     telephone,
+                    profession,
+                    biography,
                     birth_date,
                     national_register,
                     city,
@@ -163,12 +167,15 @@ module.exports = {
                 name,
                 email,
                 telephone,
+                profession,
+                biography,
                 birth_date,
                 national_register,
                 city,
                 state,
                 profile_picture,
-                password
+                password,
+                
             } = request.body;
 
             const { id } = request.params;
@@ -180,12 +187,14 @@ module.exports = {
                         name,
                         email,
                         telephone,
+                        profession,
+                        biography,
                         birth_date,
                         national_register,
                         city,
                         state,
                         profile_picture,
-                        password
+                        password,
                     })
                 .where({ id });
             return response.send();
