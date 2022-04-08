@@ -27,10 +27,22 @@ module.exports = {
                     });
                 });
             }).catch(function(error) {
-                console.log(error);
+                return response.
+                status(404)
+                .json({
+                    error: true,
+                    code: 'property.invalid',
+                    message: 'ímovel não encotrado'
+                });
             });
         }catch(err){
-            console.log(err.message);
+            return response.
+            status(404)
+            .json({
+                error: true,
+                code: 'property.invalid',
+                message: 'ímovel não encotrado'
+            });
         }
             
     },
@@ -71,6 +83,7 @@ module.exports = {
                     status(400)
                     .json({
                         error: true,
+                        code: 'user.invalid',
                         message: 'Usuário inválido'
                     });
             } else {
