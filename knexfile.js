@@ -43,9 +43,7 @@ module.exports = {
     //   charset: 'utf8'
     // },
     connection: process.env.DATABASE_URL,
-    ssl: {
-    rejectUnauthorized: false
-  },
+    ssl: true,
     migrations: {
       directory: __dirname + '/database/migrations',
     },
