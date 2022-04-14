@@ -42,12 +42,7 @@ module.exports = {
     //   database : process.env.PG_DATABASE,
     //   charset: 'utf8'
     // },
-    "use_env_variable": "DATABASE_URL",
-     "dialectOptions": {
-        "ssl": {
-           "rejectUnauthorized": false
-        }
-     },
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: __dirname + '/database/migrations',
     },
