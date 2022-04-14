@@ -8,7 +8,7 @@ const filesRoute = require('./route/filesRoute')
 const UserFavoritesRoute = require('./route/UserFavoritesRoute')
 const session = require("express-session");
 const cookieParser = require('cookie-parser');
-
+require('dotenv').config()
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
@@ -56,6 +56,6 @@ app.use((error, req, res, next) => {
   res.json({ error: error.message })
 })
 
-app.listen(8080, ()=>{
+app.listen(process.env.PORT, ()=>{
   console.log('Serviço rodando ')
 });
