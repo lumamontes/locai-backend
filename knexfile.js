@@ -1,14 +1,14 @@
 // Update with your config settings.
 require('dotenv').config()
 module.exports = {
-    development: {
+  development: {
     client: 'pg',
     connection: {
-      host : process.env.PG_HOST,
-      port : process.env.PG_PORT,
-      user : process.env.PG_USER,
-      password : process.env.PG_PASSWORD,
-      database : process.env.PG_DATABASE,
+      host: process.env.PG_HOST,
+      port: process.env.PG_PORT,
+      user: process.env.PG_USER,
+      password: process.env.PG_PASSWORD,
+      database: process.env.PG_DATABASE,
       charset: 'utf8'
     },
     migrations: {
@@ -23,7 +23,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'my_db',
-      user:     'username',
+      user: 'username',
       password: 'password'
     },
     migrations: {
@@ -44,8 +44,9 @@ module.exports = {
     // },
     connection: process.env.DATABASE_URL,
     ssl: {
-      rejectUnauthorized: false,
-  },
+      "require": true,
+      "rejectUnauthorized": false
+    },
     migrations: {
       directory: __dirname + '/database/migrations',
     },
