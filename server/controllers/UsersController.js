@@ -1,7 +1,7 @@
 const knex = require('../../database/knex');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-// const uuid = require('uuid').v4;
+const uuid = require('uuid').v4;
 const tokens = []
 
 module.exports = {
