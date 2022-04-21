@@ -6,8 +6,26 @@ const knex = require('../../database/knex');
 module.exports = {
     async index(request, response) {
         try {
+            if (Object.keys(request.query).length !== 0) {
+            const keys = []
+            const KeyValues = []
+            for (const key in request.query) {
+                if (request.query.hasOwnProperty.call(request.query, key)) {
+                    const element = request.query[key];
+                   if (element.length !== 0) {
+                       keys.push(key)
+                       KeyValues.push(element)
+                   }
+                }
+            }
+            const properties = await knex.from('properties').whereIn(
+              keys, [KeyValues]
+            )
+            return response.json(properties);
+        } else {
             let properties = await knex.from('properties');
             return response.json(properties);
+        }
         } catch (error) {
             return response.json(error);
         }
