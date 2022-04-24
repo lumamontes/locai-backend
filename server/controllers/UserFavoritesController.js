@@ -5,7 +5,8 @@ module.exports = {
         const { user_id } = request.params;
         if (!!user_id) {
             try {
-                const favorites = await knex.from('user_favorites').where({ user_id });
+                const favorites = await knex.from('properties').innerJoin('user_favorites', 'properties.id', 'user_favorites.property_id').where('user_favorites.user_id', user_id)
+
                 response.status(201).json(favorites);
             } catch (error) {
                 return response.
