@@ -110,6 +110,9 @@ module.exports = {
                     });
             } else {
                 try {
+                    const files = request.files
+                    const firstFile = request.files.shift()
+                    const url = await imgur.uploadFile(`./tmp/uploads/${firstFile.filename}`);
                     let teste = await knex('properties').insert({
                         property_type_id,
                         category_id,
@@ -130,33 +133,26 @@ module.exports = {
                         accepts_pets,
                         year_constructed,
                         property_area,
-                        land_area
+                        land_area,
+                        ad_image:url.link
                     })
                         .returning('id')
                         .then(async id => {
-                            for (let i = 0; i < request.files.length; i++) {
+                            for (let i = 0; i < files.length; i++) {
                                 try {
-                                    const url = await imgur.uploadFile(`./tmp/uploads/${request.files[i].filename}`);
+                                    const url = await imgur.uploadFile(`./tmp/uploads/${files[i].filename}`);
                                     await knex('files').insert({
                                         property_id: id[0],
                                         url: url.link,
                                     })
-                                    if (request.files[0]) {
-                                        try {
-                                            await knex('properties').where('id', '=', id[0]).update({
-                                                ad_image: url.link
-                                            })
-                                        } catch (err) {
-                                            console.log(error);
-                                        }
-                                    };
-                                    fs.unlinkSync(`./tmp/uploads/${request.files[i].filename}`);
+                                    fs.unlinkSync(`./tmp/uploads/${files[i].filename}`);
                                 } catch (error) {
                                     return response.status(400).json({
                                         message: error.message,
                                     });
                                 }
                             }
+                            fs.unlinkSync(`./tmp/uploads/${firstFile[i].filename}`);
                             return response.status(201).json({
                                 property_id: id[0],
                                 message: 'Cadastro com sucesso!'
