@@ -116,8 +116,10 @@ module.exports = {
         } else {
             try {
                 const files = request.files
-                const firstFile = request.files.shift()
-                const url = await imgur.uploadFile(`./tmp/uploads/${firstFile.filename}`);
+                const firstFile = files.length > 0 ? request.files?.shift() : [] 
+                if(firstFile.length > 0){
+                    url = await imgur.uploadFile(`./tmp/uploads/${firstFile.filename}`);
+                }
                 let teste = await knex('properties').insert({
                     property_type_id,
                     category_id,
@@ -139,7 +141,7 @@ module.exports = {
                     year_constructed,
                     property_area,
                     land_area,
-                    ad_image: url.link
+                    ad_image: firstFile.length > 0 ? url.link : null 
                 })
                     .returning('id')
                     .then(async id => {
@@ -157,7 +159,9 @@ module.exports = {
                                 });
                             }
                         }
-                        fs.unlinkSync(`./tmp/uploads/${firstFile[i].filename}`);
+                        if(firstFile.length > 0){
+                            fs.unlinkSync(`./tmp/uploads/${firstFile.filename}`);
+                        } 
                         return response.status(201).json({
                             property_id: id[0],
                             message: 'Cadastro com sucesso!'
