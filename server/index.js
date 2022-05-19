@@ -1,11 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const PropertiesRoutes = require('./route/PropertiesRoute')
-const PropertiesTypesRoute = require('./route/PropertiesTypesRoute')
-const PropertiesCategoriesRoute = require('./route/PropertiesCategoriesRoute')
-const UsersRoute = require('./route/UsersRoute')
-const filesRoute = require('./route/filesRoute')
-const UserFavoritesRoute = require('./route/UserFavoritesRoute')
+const PropertiesRoutes = require('./route/PropertiesRoute');
+const PropertiesTypesRoute = require('./route/PropertiesTypesRoute');
+const PropertiesCategoriesRoute = require('./route/PropertiesCategoriesRoute');
+const UsersRoute = require('./route/UsersRoute');
+const filesRoute = require('./route/filesRoute');
+const UserFavoritesRoute = require('./route/UserFavoritesRoute');
+const BookingsRoute = require('./route/BookingsRoute');
 const session = require("express-session");
 const cookieParser = require('cookie-parser');
 require('dotenv').config()
@@ -37,6 +38,7 @@ app.use('/api', PropertiesCategoriesRoute);
 app.use('/api', UsersRoute);
 app.use('/api', filesRoute);
 app.use('/api', UserFavoritesRoute);
+app.use('/api', BookingsRoute);
 
 app.get('/status', (req,res)=>{
   res.status(200).json({
@@ -57,5 +59,5 @@ app.use((error, req, res, next) => {
 })
 
 app.listen(process.env.PORT, ()=>{
-  console.log('Serviço rodando ')
+  console.log(`Serviço rodando na porta ${process.env.PORT}` )
 });
