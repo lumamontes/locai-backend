@@ -2,35 +2,42 @@ const knex = require('../../database/knex');
 const bcrypt = require('bcryptjs');
 module.exports = {
     async index(request, response) {
-        const { booker_user_id, property_user_id } = request.query;
-
-        if (booker_user_id && property_user_id) {
-            return response.
-                status(200)
-                .json({
-                    error: true,
-                    code: 'bookings.wrong_query_params',
-                    message: 'Consulta inválida!'
-                });
-        }
-        if (booker_user_id) {
+        const { user_id } = request.query;
+        if (user_id) {
             try {
-                let users = await knex.from('bookings').where({ booker_user_id });
+                let bookings = await knex.from('bookings').where('booker_user_id', user_id);
+                let results_booker=[];
+                if(bookings.length > 0){
+                    for (let booking of bookings) {
+                        let property = await knex.select('ad_title','ad_value', 'ad_image').from('properties').where('id', booking.property_id).first()
+                        ;
+                        let user = await knex.select('name as user_name', 'telephone','email').from('users').where('id', booking.property_user_id).first()
+                        let status = await knex.select('name as status').from('bookings_status').where('id', booking.status_id).first()
+                        
+                        const merged = Object.assign(booking, property, user, status)
+                        results_booker.push(merged)
+                    }
+                }
+                let bookings_property = await knex.from('bookings').where('id', user_id);
+                let results_property=[];
+                if(bookings_property.length > 0){
+                    for (let booking of bookings_property) {
+                        let property = await knex.select('ad_title','ad_value', 'ad_image').from('properties').where('id', booking.property_id).first()
+                        ;
+                        let user = await knex.select('name as user_name', 'telephone','email').from('users').where('id', booking.property_user_id).first()
+                        let status = await knex.select('name as status').from('bookings_status').where('id', booking.status_id).first()
+                        
+                        const merged = Object.assign(booking, property, user, status)
+                        results_property.push(merged)
+                    }
+                }
                 return response
-                    .json(users)
+                    .json({
+                        results_booker,
+                        results_property
+                    })
             } catch (error) {
                 console.log(error)
-                return response.json(error);
-            }
-        }
-
-        if (property_user_id) {
-            try {
-                let users = await knex.from('bookings').where({ property_user_id });
-                return response
-                    .status(200)
-                    .json(users)
-            } catch (error) {
                 return response.json(error);
             }
         }
