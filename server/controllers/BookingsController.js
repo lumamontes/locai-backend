@@ -18,7 +18,7 @@ module.exports = {
                         results_booker.push(merged)
                     }
                 }
-                let bookings_property = await knex.from('bookings').where('id', user_id);
+                let bookings_property = await knex.from('bookings').where('property_user_id', user_id);
                 let results_property=[];
                 if(bookings_property.length > 0){
                     for (let booking of bookings_property) {
