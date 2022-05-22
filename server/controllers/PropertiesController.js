@@ -65,8 +65,10 @@ module.exports = {
             accepts_pets,
             year_constructed,
             property_area,
-            land_area
+            land_area,
+            files
         } = request.body;
+        const firstFile = files.shift();
         let users = await knex.from('users')
             .where('id', user_id);
         if (users.length == 0) {
@@ -79,11 +81,6 @@ module.exports = {
                 });
         } else {
             try {
-                const files = request.files
-                const firstFile = files.length > 0 ? request.files?.shift() : []
-                if (firstFile.length > 0) {
-                    url = await imgur.uploadFile(`./tmp/uploads/${firstFile.filename}`);
-                }
                 let teste = await knex('properties').insert({
                     property_type_id,
                     category_id,
@@ -105,26 +102,19 @@ module.exports = {
                     year_constructed,
                     property_area,
                     land_area,
-                    ad_image: firstFile.length > 0 ? url.link : null
+                    ad_image: firstFile
                 })
                     .returning('id')
                     .then(async id => {
-                        for (let i = 0; i < files.length; i++) {
+                        for (file of files) {
                             try {
-                                const url = await imgur.uploadFile(`./tmp/uploads/${files[i].filename}`);
                                 await knex('files').insert({
                                     property_id: id[0],
-                                    url: url.link,
+                                    url: file,
                                 })
-                                fs.unlinkSync(`./tmp/uploads/${files[i].filename}`);
                             } catch (error) {
-                                return response.status(400).json({
-                                    message: error.message,
-                                });
+                                console.log(error)   
                             }
-                        }
-                        if (firstFile.length > 0) {
-                            fs.unlinkSync(`./tmp/uploads/${firstFile.filename}`);
                         }
                         return response.status(201).json({
                             property_id: id[0],
