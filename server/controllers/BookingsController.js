@@ -9,7 +9,7 @@ module.exports = {
                 let results_booker=[];
                 if(bookings.length > 0){
                     for (let booking of bookings) {
-                        let property = await knex.select('ad_title','ad_value', 'ad_image', 'property_adress', 'property_city', 'property_neighborhood').from('properties').where('id', booking.property_id).first()
+                        let property = await knex.select('ad_title','ad_value', 'ad_image', 'property_adress', 'property_city', 'property_neighborhood', 'ad_description').from('properties').where('id', booking.property_id).first()
                         ;
                         let user = await knex.select('name as user_name', 'telephone','email').from('users').where('id', booking.property_user_id).first()
                         let status = await knex.select('name as status').from('bookings_status').where('id', booking.status_id).first()
