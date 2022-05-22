@@ -26,8 +26,8 @@ module.exports = {
                         ;
                         let user = await knex.select('name as user_name', 'telephone','email').from('users').where('id', booking.property_user_id).first()
                         let status = await knex.select('name as status').from('bookings_status').where('id', booking.status_id).first()
-                        
-                        const merged = Object.assign(booking, property, user, status)
+                        let user_booked = await knex.select('name as user_booked').from('users').where('id', booking.booker_user_id).first()
+                        const merged = Object.assign(booking, property, user, status, user_booked)
                         results_property.push(merged)
                     }
                 }
