@@ -18,15 +18,20 @@ module.exports = {
                    }
                 }
             }
-            const properties = await knex.from('properties').whereIn(
-              keys, [KeyValues]
-            )
+            if (KeyValues.length !== 0 ) {      
+                const properties = await knex.from('properties').whereIn(
+                 [keys], [KeyValues]
+                )
+                return response.json(properties);
+            }
+            let properties = await knex.from('properties');
             return response.json(properties);
         } else {
             let properties = await knex.from('properties');
             return response.json(properties);
         }
         } catch (error) {
+            console.log(error)
             return response.json(error);
         }
     },
