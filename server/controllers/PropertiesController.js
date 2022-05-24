@@ -20,7 +20,7 @@ module.exports = {
             }
             if (KeyValues.length !== 0 ) {      
                 const properties = await knex.from('properties').whereIn(
-                 [keys], [KeyValues]
+                 keys, [KeyValues]
                 )
                 return response.json(properties);
             }
