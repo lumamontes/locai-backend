@@ -1,9 +1,9 @@
 
 exports.up = function (knex) {
     return knex.schema
-        .table('properties', function (table) {
+        .table('bookings', function (table) {
             table.string('signature_ip'),
-            table.string('signature_hash'),
+            table.uuid('signature_hash').defaultTo(knex.raw('uuid_generate_v4()')),
             table.string('signature_name'),
             table.string('signature_cpf'),
             table.string('signature_email')
@@ -12,5 +12,11 @@ exports.up = function (knex) {
 
 exports.down = function (knex) {
     return knex.schema
-        .dropColumns('signature_ip', 'signature_hash', 'signature_name', 'signature_cpf', 'signature_email');
+    .table('bookings', function (table) {
+        table.dropColumn('signature_ip'),
+        table.dropColumn('signature_hash'),
+        table.dropColumn('signature_name'),
+        table.dropColumn('signature_cpf'),
+        table.dropColumn('signature_email')
+    })
 };

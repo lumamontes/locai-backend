@@ -6,7 +6,8 @@ exports.seed = function(knex) {
       return knex('bookings_status').insert([
         {name: 'Aguardando confirmação'},
         {name: 'Confirmado'},
-        {name: 'Cancelado'}
+        {name: 'Cancelado'},
+        {name: 'Contrato assinado'},
       ]);
     });
 };
