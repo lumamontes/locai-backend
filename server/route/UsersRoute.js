@@ -36,5 +36,5 @@ router.get('/me', checkAuthMiddleware, async (request, response) => {
 });
 router.delete('/users/:id', checkAuthMiddleware, UsersController.delete)
 router.put('/users/:id', checkAuthMiddleware, UsersController.update)
-router.put('users/:id/password', checkAuthMiddleware, UsersController.changePassword)
+router.put('users/password:id/', checkAuthMiddleware, UsersController.changePassword)
 module.exports = router;
