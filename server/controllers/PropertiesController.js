@@ -91,7 +91,8 @@ module.exports = {
             year_constructed,
             property_area,
             land_area,
-            files
+            files,
+            cep
         } = request.body;
         const firstFile = files.shift();
         let users = await knex.from('users')
@@ -127,7 +128,8 @@ module.exports = {
                     year_constructed,
                     property_area,
                     land_area,
-                    ad_image: firstFile
+                    ad_image: firstFile,
+                    cep
                 })
                     .returning('id')
                     .then(async id => {
