@@ -39,7 +39,7 @@ module.exports = {
         try {
             const { id } = request.params;
             const property = await knex.select().from('properties').where({id}).first();
-            const user = await knex.select('id', 'name', 'email', 'national_register', 'telephone').from('users').where('id', `${property.user_id}`);
+            const user = await knex.select('id', 'name', 'email', 'national_register', 'telephone', 'profile_picture').from('users').where('id', `${property.user_id}`);
             const files = await knex.select().from('files').where('property_id', id);
             response.json({
                     property, 
