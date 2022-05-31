@@ -181,8 +181,8 @@ module.exports = {
     }
   },
 
-  async changePassword(req, res) {
-    const { newPassword, passwordConfirmed } = req.body
+  async changePassword(request, response) {
+    const { newPassword, passwordConfirmed } = request.body
     const { id } = request.params
     const password = newPassword + passwordConfirmed
     const hashedPassword = await bcrypt.hash(password, 8)
