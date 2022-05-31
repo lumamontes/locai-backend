@@ -182,9 +182,9 @@ module.exports = {
   },
 
   async changePassword(request, response) {
-    const { newPassword, passwordConfirmed } = request.body
+    const { newPassword } = request.body
     const { id } = request.params
-    const password = newPassword + passwordConfirmed
+    const password = newPassword
     const hashedPassword = await bcrypt.hash(password, 8)
     try {
         await knex("users").update({ password: hashedPassword }).where({ id })
