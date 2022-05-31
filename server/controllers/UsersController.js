@@ -175,7 +175,7 @@ module.exports = {
                 state,
                 profile_picture,
                 password,
-                
+                cpf
             } = request.body;
 
             const { id } = request.params;
@@ -195,6 +195,7 @@ module.exports = {
                         state,
                         profile_picture,
                         password,
+                        cpf
                     })
                 .where({ id });
             return response.send();
