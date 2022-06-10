@@ -31,6 +31,7 @@ module.exports = {
         state,
         profile_picture,
         password,
+        cpf
       } = request.body
 
       let users = await knex.from("users").where({ email })
@@ -52,6 +53,7 @@ module.exports = {
           state,
           profile_picture,
           password: hashedPassword,
+          cpf
         })
         return response.status(201).json({
           message: "Cadastro feito com sucesso! :)",
