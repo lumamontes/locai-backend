@@ -1,5 +1,8 @@
 # LOCAÍ
 
+![image](https://user-images.githubusercontent.com/60052718/174868308-e2d96b60-5cb6-4915-8259-d2845d6de27c.png)
+
+
 API para plataforma LOCAÍ, desenvolvida para trabalho de conclusão de curso da faculdade Meta com o objetivo de anunciar imóveis para alugar.
 
 Ferramentas: Node.JS com o QueryBuilder Knex.js para PostgreSQL
@@ -14,7 +17,8 @@ Endpoints:
 - BookingsStatus
 - UserFavorites
 
-Documentação completa: http://www.locai-api.netlify.app
+Documentação completa: http://www.locai-api.netlify.app <br>
+Insomnia: https://drive.google.com/file/d/1lxCU-uRikFdE4BB8hASGECEQRVsRj9s1/view?usp=sharing
 
 ## Como executar 
 
