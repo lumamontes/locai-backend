@@ -1,32 +1,21 @@
-# projeti-home-backend
+# LOCAÍ
 
-API para o Projeti da a faculdade Meta com o objetivo de desenvolver uma plataforma de anúncio de apartamentos e casas para alugar.
+API para plataforma LOCAÍ, desenvolvida para trabalho de conclusão de curso da faculdade Meta com o objetivo de anunciar imóveis para alugar.
 
-Ferramentas: Node.JS com o QueryBuilder Knex.js para MySQL
+Ferramentas: Node.JS com o QueryBuilder Knex.js para PostgreSQL
 
-Rotas:
+Endpoints:
 
-Properties
-- api/get/properties
-- api/get/properties/:id
-- api/get/properties_user/:user_id
-- api/post/properties/
-- api/put/properties/:id
-- api/delete/properties/:id
+- Properties
+- Properties_types
+- Properties_categories
+- Users
+- Bookings
+- BookingsStatus
+- UserFavorites
 
-Users
-- api/get/users/:id
-- api/post/users
-- api/post/login
-- api/post/refresh
-- api/get/me
+Documentação completa: http://www.locai-api.netlify.app
 
-Properties_types
-
-- api/get/properties_types
-
-Documentação completa:
-https://tender-yalow-070959.netlify.app/
 ## Como executar 
 
 Para iniciá-lo, siga os passos abaixo:
@@ -36,12 +25,12 @@ $ yarn
 
 Localmente:
 
-#Crie um banco de dados MySQL localmente e coloque as informações de conexão no arquivo knexfile.js
+#Crie um banco de dados postgreSQL localmente e coloque as informações de conexão no arquivo knexfile.js
  $  development: {
-    client: 'mysql',
+    client: 'pg',
     connection: {
       host : 'localhost',
-      port : 3306,
+      port : your_database_port,
       user : 'your_database_user',
       password : 'your_database_password',
       database : 'myapp_test',
